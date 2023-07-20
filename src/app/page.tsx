@@ -70,55 +70,30 @@ export default function Home() {
                 label={"Applicant Name"}
                 id={"applicant_name"}
                 value={""}
-                onTextChange={function (
-                  event: React.ChangeEvent<HTMLInputElement>
-                ): void {
-                  throw new Error("Function not implemented.");
-                }}
                 additionalStyle={{ div: "md:col-span-5" }}
               />
               <RegularTextfield
                 label={"Application Id"}
                 id={"application_id"}
                 value={""}
-                onTextChange={function (
-                  event: React.ChangeEvent<HTMLInputElement>
-                ): void {
-                  throw new Error("Function not implemented.");
-                }}
                 additionalStyle={{ div: "md:col-span-5" }}
               />
               <RegularTextfield
                 label={"Mouza"}
                 id={"mouza"}
                 value={""}
-                onTextChange={function (
-                  event: React.ChangeEvent<HTMLInputElement>
-                ): void {
-                  throw new Error("Function not implemented.");
-                }}
                 additionalStyle={{ div: "md:col-span-3" }}
               />
               <RegularTextfield
                 label={"Khata No."}
                 id={"khata"}
                 value={""}
-                onTextChange={function (
-                  event: React.ChangeEvent<HTMLInputElement>
-                ): void {
-                  throw new Error("Function not implemented.");
-                }}
                 additionalStyle={{ div: "md:col-span-2" }}
               />
               <RegularTextfield
                 label={"Application Fees Id"}
                 id={"application_transaction_id"}
                 value={""}
-                onTextChange={function (
-                  event: React.ChangeEvent<HTMLInputElement>
-                ): void {
-                  throw new Error("Function not implemented.");
-                }}
                 additionalStyle={{ div: "md:col-span-2" }}
               />
               <RegularDatePicker
@@ -128,22 +103,12 @@ export default function Home() {
                 label={"Application Date"}
                 id={"application_entry_date"}
                 value={""}
-                onTextChange={function (
-                  event: React.ChangeEvent<HTMLInputElement>
-                ): void {
-                  throw new Error("Function not implemented.");
-                }}
                 additionalStyle={{ div: "md:col-span-1" }}
               />
               <RegularTextfield
                 label={"Application Fees"}
                 id={"application_fees_amount"}
                 value={""}
-                onTextChange={function (
-                  event: React.ChangeEvent<HTMLInputElement>
-                ): void {
-                  throw new Error("Function not implemented.");
-                }}
                 additionalStyle={{ div: "md:col-span-1" }}
               />
             </div>

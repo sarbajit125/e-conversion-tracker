@@ -6,6 +6,7 @@ import { format } from "date-fns"
 import { cn } from "@/lib/utils";
 import { Calendar as CalendarIcon } from "lucide-react"
 import dayjs from 'dayjs';
+import { RegularTextfieldProps } from "@/layouts/ComponentsStyle";
 function RegularDatePicker({additionalStyle, id, label, value, selectDate}: RegularDatePickerProps) {
   return (
     <Popover>
@@ -37,6 +38,7 @@ function RegularDatePicker({additionalStyle, id, label, value, selectDate}: Regu
   )
 }
 interface RegularDatePickerProps extends RegularTextfieldProps {
+  value: string,
   selectDate: (date: string) => void
 }
 
