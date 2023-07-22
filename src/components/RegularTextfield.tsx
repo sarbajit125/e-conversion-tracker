@@ -18,7 +18,7 @@ function RegularTextfield({
         {...field}
         {...rest}
       />
-       {touched && error && (
+      {touched && error && (
         <div className="text-red-600 text-sm mt-0.5">{error}</div>
       )}
     </div>

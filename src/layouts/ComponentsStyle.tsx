@@ -6,7 +6,7 @@ export interface RegularTextfieldProps
   label: string;
   additionalStyle?: RegularTextfieldStyles;
 }
-interface RegularTextfieldStyles {
+export interface RegularTextfieldStyles {
   div?: string;
   input?: string;
   label?: string;

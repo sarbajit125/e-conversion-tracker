@@ -3,30 +3,37 @@ import RegularDatePicker from "@/components/RegularDatePicker";
 import RegularTextfield from "@/components/RegularTextfield";
 import React, { useState } from "react";
 import { pdfjs } from "react-pdf";
-import { Formik, Form } from "formik";
+import { Formik, Form, useFormikContext } from "formik";
+import { UploadType } from "@/lib/utils";
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 export default function Home() {
   const [pdfText, setPdfText] = useState("");
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
-  const initialValues = {
+  const [formInitalValues, setInitalValues] = useState({
     applicant_name: "",
     application_id: "",
     mouza: "",
+    tahsil: "",
     khata: "",
     application_transaction_id: "",
     application_entry_date: "",
     application_fees_amount: "",
-  };
+  });
   const onSubmit = (values) => console.log("Form data", values);
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+    uploadType: UploadType
+  ) => {
     const file = event.target.files && event.target.files[0];
     if (file) {
-      console.log("coming here 1");
-      handleReadPdfText(file);
+      handleReadPdfText(file, uploadType);
     }
   };
-  const handleReadPdfText = async (uploadedFile: File) => {
+  const handleReadPdfText = async (
+    uploadedFile: File,
+    uploadType: UploadType
+  ) => {
     try {
       const fileArrayBuffer = await uploadedFile.arrayBuffer();
       const typedArray = new Uint8Array(fileArrayBuffer);
@@ -35,62 +42,126 @@ export default function Home() {
         pdf.getPage(i + 1).then((page) => page.getTextContent())
       );
       const pageTexts = await Promise.all(pageTextPromises);
-      console.log(pageTexts[0].items);
-      const applicantNameidx = pageTexts[0].items.findIndex(
-        (item) => item.str === "Applicant Name :"
+      // console.log(pageTexts[0].items);
+      const extractedTextStr: string[] = pageTexts[0].items.map((item) =>
+        "str" in item ? item.str : ""
       );
-      const applicantNameStr = pageTexts[0].items[applicantNameidx + 1];
-      console.log(applicantNameStr);
-      const extractedText = pageTexts
-        .flatMap((pageText) => pageText.items.map((item) => item.str))
-        .join(" ");
-      console.log(extractedText);
+      console.log(extractedTextStr);
+      if (extractedTextStr.length != 0 && uploadType == UploadType.Entry) {
+        fillPersonalDetails(extractedTextStr);
+      } else if (
+        extractedTextStr.length != 0 &&
+        uploadType == UploadType.Acknowledgement
+      ) {
+        fillEntryTransactionDetails(extractedTextStr);
+      }
     } catch (error) {
       console.log(error);
     }
   };
+  const fillPersonalDetails = (textArr: string[]) => {
+    const applicantNameidx = textArr.findIndex(
+      (item) => item === "Applicant Name :"
+    );
+    const applicantNameStr = textArr[applicantNameidx + 1];
+    const applicationIdIdx = textArr.findIndex((item) => item === "on No. :");
+    const applicationNumberStr = textArr[applicationIdIdx + 1];
+    const mouzaIdx = textArr.findIndex((item) => item === "Area (in Hectares)");
+    const mouzaStr = textArr[mouzaIdx + 2];
+    const tahsilIdx = textArr.findIndex((item) => item === "Tahasil :");
+    const tahsilStr = textArr[tahsilIdx + 1];
+    const dateIdx = textArr.findIndex((item) => item === "Date :");
+    const entryDate = textArr[dateIdx + 2];
+    const khataStr = textArr[mouzaIdx + 4];
+    setInitalValues((prevValue) =>({
+      ...prevValue,
+      applicant_name: applicantNameStr,
+      application_id: applicationNumberStr,
+      application_entry_date: entryDate,
+      khata: khataStr,
+      mouza: mouzaStr,
+      tahsil: tahsilStr,
+    }));
+  };
+  const fillEntryTransactionDetails = (textArr: string[]) => {
+    const transactionIdIdx = textArr.findIndex(
+      (item) => item === "Transaction ID :"
+    );
+    const transactionIdStr = textArr[transactionIdIdx + 2];
+    const transactionAmtIdx = textArr.findIndex(
+      (item) => item === "Amount Deposited :"
+    );
+    const transactionAmtStr = textArr[transactionAmtIdx + 2];
+    setInitalValues((prevValue) => ({
+      ...prevValue,
+      application_transaction_id: transactionIdStr,
+      application_fees_amount: transactionAmtStr,
+    }));
+  };
   return (
     <main className="container">
-      <div className="bg-white rounded shadow-lg p-4 px-4 md:p-8 mb-6">
-        <div className="grid gap-4 gap-y-2 text-sm grid-cols-1 lg:grid-cols-3">
-          <div className="text-gray-600">
-            <p className="font-medium text-lg">Upload Receipts</p>
-            <p>You can directly upload receipts to auto fill form</p>
-          </div>
-          <div className="lg:col-span-2">
-            <div className="grid gap-4 gap-y-2 text-sm grid-cols-1 md:grid-cols-5">
-              <div className="md:col-span-5">
-                <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                  Upload application receipt
-                </label>
-                <input
-                  className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-                  id="file_input"
-                  accept=".pdf"
-                  type="file"
-                  onChange={handleFileChange}
-                />
-              </div>
-              <div className="md:col-span-5">
-                <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                  Upload conversion receipt
-                </label>
-                <input
-                  className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-                  id="file_input"
-                  accept=".pdf"
-                  type="file"
-                  onChange={handleFileChange}
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <Formik initialValues={initialValues} onSubmit={onSubmit}>
-        {(formik) => {
+      <Formik
+        initialValues={formInitalValues}
+        onSubmit={onSubmit}
+        enableReinitialize={true}
+      >
+        {({ setFieldValue }) => {
           return (
             <Form>
+              <div className="bg-white rounded shadow-lg p-4 px-4 md:p-8 mb-6">
+                <div className="grid gap-4 gap-y-2 text-sm grid-cols-1 lg:grid-cols-3">
+                  <div className="text-gray-600">
+                    <p className="font-medium text-lg">Upload Receipts</p>
+                    <p>You can directly upload receipts to auto fill form</p>
+                  </div>
+                  <div className="lg:col-span-2">
+                    <div className="grid gap-4 gap-y-2 text-sm grid-cols-1 md:grid-cols-5">
+                      <div className="md:col-span-5">
+                        <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                          Application details slip
+                        </label>
+                        <input
+                          className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                          id="file_input"
+                          accept=".pdf"
+                          type="file"
+                          onChange={(event) =>
+                            handleFileChange(event, UploadType.Entry)
+                          }
+                        />
+                      </div>
+                      <div className="md:col-span-5">
+                        <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                          Acknowledge-cum-Payment Receipt
+                        </label>
+                        <input
+                          className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                          id="file_input"
+                          accept=".pdf"
+                          type="file"
+                          onChange={(event) =>
+                            handleFileChange(event, UploadType.Acknowledgement)
+                          }
+                        />
+                      </div>
+                      <div className="md:col-span-5">
+                        <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                          Conversion Payment Acknowledge Slip
+                        </label>
+                        <input
+                          className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                          id="file_input"
+                          accept=".pdf"
+                          type="file"
+                          onChange={(event) =>
+                            handleFileChange(event, UploadType.Conversion)
+                          }
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
               <div className="bg-white rounded shadow-lg p-4 px-4 md:p-8 mb-6">
                 <div className="grid gap-4 gap-y-2 text-sm grid-cols-1 lg:grid-cols-3">
                   <div className="text-gray-600">
@@ -107,40 +178,36 @@ export default function Home() {
                       <RegularTextfield
                         label={"Application Id"}
                         id={"application_id"}
-                        value={""}
                         additionalStyle={{ div: "md:col-span-5" }}
                       />
                       <RegularTextfield
                         label={"Mouza"}
                         id={"mouza"}
-                        value={""}
                         additionalStyle={{ div: "md:col-span-3" }}
                       />
                       <RegularTextfield
-                        label={"Khata No."}
-                        id={"khata"}
-                        value={""}
+                        label={"Tahsil"}
+                        id={"tahsil"}
                         additionalStyle={{ div: "md:col-span-2" }}
                       />
                       <RegularTextfield
                         label={"Application Fees Id"}
                         id={"application_transaction_id"}
-                        value={""}
                         additionalStyle={{ div: "md:col-span-2" }}
                       />
                       <RegularDatePicker
-                        selectDate={function (date: string): void {
-                          throw new Error("Function not implemented.");
-                        }}
                         label={"Application Date"}
                         id={"application_entry_date"}
-                        value={""}
                         additionalStyle={{ div: "md:col-span-1" }}
                       />
                       <RegularTextfield
                         label={"Application Fees"}
                         id={"application_fees_amount"}
-                        value={""}
+                        additionalStyle={{ div: "md:col-span-1" }}
+                      />
+                      <RegularTextfield
+                        label={"Khata No."}
+                        id={"khata"}
                         additionalStyle={{ div: "md:col-span-1" }}
                       />
                     </div>
