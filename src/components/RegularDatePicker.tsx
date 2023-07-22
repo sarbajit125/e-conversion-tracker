@@ -20,11 +20,11 @@ function RegularDatePicker({additionalStyle, id, label}: RegularDatePickerProps)
           id={id}
           variant={"outline"}
           className={cn(
-            "h-10 border mt-1 rounded w-full bg-gray-50 text-left font-normal",
+            "relative mb-6 mt-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg w-full",
             !(field.value.length === 0) && "text-muted-foreground"
           )}
         >
-          <CalendarIcon className="mr-2 h-4 w-4" />
+          <CalendarIcon className="absolute inset-y-0 left-0 flex m-2 pointer-events-none" />
           {field.value.length  > 0 ? field.value : <span>Pick a date</span>}
         </Button>
         </div>
