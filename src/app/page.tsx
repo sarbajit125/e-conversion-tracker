@@ -19,6 +19,10 @@ export default function Home() {
     application_transaction_id: "",
     application_entry_date: "",
     application_fees_amount: "",
+    conversion_case_no: "",
+    conversion_transaction_id: "",
+    conversion_transaction_amount: "",
+    conversion_transaction_date: "",
   });
   const onSubmit = (values) => console.log("Form data", values);
   const handleFileChange = (
@@ -54,6 +58,11 @@ export default function Home() {
         uploadType == UploadType.Acknowledgement
       ) {
         fillEntryTransactionDetails(extractedTextStr);
+      } else if (
+        extractedTextStr.length != 0 &&
+        uploadType == UploadType.Conversion
+      ) {
+        fillConversionDetails(extractedTextStr);
       }
     } catch (error) {
       console.log(error);
@@ -73,7 +82,7 @@ export default function Home() {
     const dateIdx = textArr.findIndex((item) => item === "Date :");
     const entryDate = textArr[dateIdx + 2];
     const khataStr = textArr[mouzaIdx + 4];
-    setInitalValues((prevValue) =>({
+    setInitalValues((prevValue) => ({
       ...prevValue,
       applicant_name: applicantNameStr,
       application_id: applicationNumberStr,
@@ -96,6 +105,29 @@ export default function Home() {
       ...prevValue,
       application_transaction_id: transactionIdStr,
       application_fees_amount: transactionAmtStr,
+    }));
+  };
+  const fillConversionDetails = (textArr: string[]) => {
+    const transactionIdIdx = textArr.findIndex(
+      (item) => item === "Transaction ID :"
+    );
+    const transactionIdStr = textArr[transactionIdIdx + 2];
+    const transactionAmtIdx = textArr.findIndex(
+      (item) => item === "Amount Deposited :"
+    );
+    const transactionAmtStr = textArr[transactionAmtIdx + 2];
+    const dateIdx = textArr.findIndex((item) => item === "Date :");
+    const entryDate = textArr[dateIdx + 2];
+    const conversionIdx = textArr.findIndex(
+      (item) => item === "Conversion Case No :"
+    );
+    const converisonCaseStr = textArr[conversionIdx + 1];
+    setInitalValues((prevValue) => ({
+      ...prevValue,
+      conversion_transaction_id: transactionIdStr,
+      conversion_transaction_amount: transactionAmtStr,
+      conversion_transaction_date: entryDate,
+      conversion_case_no: converisonCaseStr,
     }));
   };
   return (
@@ -204,11 +236,49 @@ export default function Home() {
                         label={"Application Fees"}
                         id={"application_fees_amount"}
                         additionalStyle={{ div: "md:col-span-1" }}
+                        leftView={
+                          <span className="text-gray-500 sm:text-sm">₹</span>
+                        }
                       />
                       <RegularTextfield
                         label={"Khata No."}
                         id={"khata"}
                         additionalStyle={{ div: "md:col-span-1" }}
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="bg-white rounded shadow-lg p-4 px-4 md:p-8 mb-6">
+                <div className="grid gap-4 gap-y-2 text-sm grid-cols-1 lg:grid-cols-3">
+                  <div className="text-gray-600">
+                    <p className="font-medium text-lg">Conversion Details</p>
+                    <p>You can directly upload receipts to auto fill form</p>
+                  </div>
+                  <div className="lg:col-span-2">
+                    <div className="grid gap-4 gap-y-2 text-sm grid-cols-1 md:grid-cols-5">
+                      <RegularTextfield
+                        label={"Conversion Case No"}
+                        id={"conversion_case_no"}
+                        additionalStyle={{ div: "md:col-span-3" }}
+                      />
+                      <RegularDatePicker
+                        label={"Deposit Date"}
+                        id={"conversion_transaction_date"}
+                        additionalStyle={{ div: "md:col-span-2" }}
+                      />
+                      <RegularTextfield
+                        label={"Conversion Transaction Id"}
+                        id={"conversion_transaction_id"}
+                        additionalStyle={{ div: "md:col-span-3" }}
+                      />
+                      <RegularTextfield
+                        label={"Conversion Amount Deposited"}
+                        id={"conversion_transaction_amount"}
+                        additionalStyle={{ div: "md:col-span-2" }}
+                        leftView={
+                          <span className="text-gray-500 sm:text-sm">₹</span>
+                        }
                       />
                     </div>
                   </div>

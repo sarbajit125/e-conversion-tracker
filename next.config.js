@@ -8,6 +8,8 @@ const nextConfig = {
         test: /\.node/,
         use: 'raw-loader',
       });
+      config.resolve.alias.canvas = false
+      config.resolve.alias.encoding = false
       return config;
     },
   };
