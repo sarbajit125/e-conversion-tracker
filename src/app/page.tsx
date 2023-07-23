@@ -3,13 +3,11 @@ import RegularDatePicker from "@/components/RegularDatePicker";
 import RegularTextfield from "@/components/RegularTextfield";
 import React, { useState } from "react";
 import { pdfjs } from "react-pdf";
-import { Formik, Form, useFormikContext } from "formik";
+import { Formik, Form, useFormikContext, Field } from "formik";
 import { UploadType } from "@/lib/utils";
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 export default function Home() {
-  const [pdfText, setPdfText] = useState("");
-  const [uploadedFile, setUploadedFile] = useState<File | null>(null);
   const [formInitalValues, setInitalValues] = useState({
     applicant_name: "",
     application_id: "",
@@ -23,7 +21,9 @@ export default function Home() {
     conversion_transaction_id: "",
     conversion_transaction_amount: "",
     conversion_transaction_date: "",
+    ready_for_conversion: false,
   });
+  const [showConversionDiv, setConversionDiv] = useState<boolean>(false);
   const onSubmit = (values) => console.log("Form data", values);
   const handleFileChange = (
     event: React.ChangeEvent<HTMLInputElement>,
@@ -137,7 +137,7 @@ export default function Home() {
         onSubmit={onSubmit}
         enableReinitialize={true}
       >
-        {({ setFieldValue }) => {
+        {({ values, setFieldValue }) => {
           return (
             <Form>
               <div className="bg-white rounded shadow-lg p-4 px-4 md:p-8 mb-6">
@@ -246,44 +246,89 @@ export default function Home() {
                         additionalStyle={{ div: "md:col-span-1" }}
                       />
                     </div>
+                    <div className="md:col-span-5">
+                      <div className="inline-flex items-center">
+                        <input
+                          type="checkbox"
+                          name="ready_for_conversion"
+                          id="ready_for_conversion"
+                          checked={values.ready_for_conversion}
+                          className="form-checkbox"
+                          onChange={(event) => {
+                            setFieldValue(
+                              "ready_for_conversion",
+                              event.target.checked
+                            );
+                            setConversionDiv(event.target.checked);
+                          }}
+                        />
+                        <label htmlFor="ready_for_conversion" className="ml-2">
+                          Ready for conversion ?
+                        </label>
+                      </div>
+                    </div>
+                    {!showConversionDiv ? (
+                      <div className="md:col-span-5 text-right">
+                        <div className="inline-flex items-end">
+                          <button
+                            type="submit"
+                            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                          >
+                            Submit
+                          </button>
+                        </div>
+                      </div>
+                    ) : null}
                   </div>
                 </div>
               </div>
-              <div className="bg-white rounded shadow-lg p-4 px-4 md:p-8 mb-6">
-                <div className="grid gap-4 gap-y-2 text-sm grid-cols-1 lg:grid-cols-3">
-                  <div className="text-gray-600">
-                    <p className="font-medium text-lg">Conversion Details</p>
-                    <p>You can directly upload receipts to auto fill form</p>
-                  </div>
-                  <div className="lg:col-span-2">
-                    <div className="grid gap-4 gap-y-2 text-sm grid-cols-1 md:grid-cols-5">
-                      <RegularTextfield
-                        label={"Conversion Case No"}
-                        id={"conversion_case_no"}
-                        additionalStyle={{ div: "md:col-span-3" }}
-                      />
-                      <RegularDatePicker
-                        label={"Deposit Date"}
-                        id={"conversion_transaction_date"}
-                        additionalStyle={{ div: "md:col-span-2" }}
-                      />
-                      <RegularTextfield
-                        label={"Conversion Transaction Id"}
-                        id={"conversion_transaction_id"}
-                        additionalStyle={{ div: "md:col-span-3" }}
-                      />
-                      <RegularTextfield
-                        label={"Conversion Amount Deposited"}
-                        id={"conversion_transaction_amount"}
-                        additionalStyle={{ div: "md:col-span-2" }}
-                        leftView={
-                          <span className="text-gray-500 sm:text-sm">₹</span>
-                        }
-                      />
+              {showConversionDiv ? (
+                <div className="bg-white rounded shadow-lg p-4 px-4 md:p-8 mb-6">
+                  <div className="grid gap-4 gap-y-2 text-sm grid-cols-1 lg:grid-cols-3">
+                    <div className="text-gray-600">
+                      <p className="font-medium text-lg">Conversion Details</p>
+                      <p>You can directly upload receipts to auto fill form</p>
+                    </div>
+                    <div className="lg:col-span-2">
+                      <div className="grid gap-4 gap-y-2 text-sm grid-cols-1 md:grid-cols-5">
+                        <RegularTextfield
+                          label={"Conversion Case No"}
+                          id={"conversion_case_no"}
+                          additionalStyle={{ div: "md:col-span-3" }}
+                        />
+                        <RegularDatePicker
+                          label={"Deposit Date"}
+                          id={"conversion_transaction_date"}
+                          additionalStyle={{ div: "md:col-span-2" }}
+                        />
+                        <RegularTextfield
+                          label={"Conversion Transaction Id"}
+                          id={"conversion_transaction_id"}
+                          additionalStyle={{ div: "md:col-span-3" }}
+                        />
+                        <RegularTextfield
+                          label={"Conversion Amount Deposited"}
+                          id={"conversion_transaction_amount"}
+                          additionalStyle={{ div: "md:col-span-2" }}
+                          leftView={
+                            <span className="text-gray-500 sm:text-sm">₹</span>
+                          }
+                        />
+                      </div>
+                    </div>
+                    <div className="md:col-span-5 text-right">
+                      <div className="inline-flex items-end">
+                        <button
+                          type="submit"
+                          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                        >
+                          Submit
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
+              ) : null}
             </Form>
           );
         }}
