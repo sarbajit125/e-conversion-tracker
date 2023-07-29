@@ -5,10 +5,12 @@ import React, { useState } from "react";
 import { pdfjs } from "react-pdf";
 import { Formik, Form, useFormikContext, Field } from "formik";
 import { UploadType } from "@/lib/utils";
+import * as Yup from 'yup';
+import { PDFFormSchema } from "@/layouts/ComponentsStyle";
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 export default function Home() {
-  const [formInitalValues, setInitalValues] = useState({
+  const [formInitalValues, setInitalValues] = useState<PDFFormSchema>({
     applicant_name: "",
     application_id: "",
     mouza: "",
@@ -23,8 +25,23 @@ export default function Home() {
     conversion_transaction_date: "",
     ready_for_conversion: false,
   });
+  const validationSchema: Yup.Schema<PDFFormSchema> = Yup.object().shape({
+    applicant_name: Yup.string().required('Mandatory field'),
+    application_id: Yup.string().required('Mandatory field'),
+    mouza: Yup.string().required('Mandatory field'),
+    tahsil: Yup.string().required('Mandatory field'),
+    khata: Yup.string().required('Mandatory field'),
+    application_transaction_id: Yup.string().required('Mandatory field'),
+    application_entry_date: Yup.string(),
+    application_fees_amount: Yup.string(),
+    conversion_case_no: Yup.string(),
+    conversion_transaction_id: Yup.string(),
+    conversion_transaction_amount: Yup.string(),
+    conversion_transaction_date: Yup.string(),
+    ready_for_conversion: Yup.boolean().required(),
+  })
   const [showConversionDiv, setConversionDiv] = useState<boolean>(false);
-  const onSubmit = (values) => console.log("Form data", values);
+  const onSubmit = (values: PDFFormSchema) => console.log("Form data", values.applicant_name);
   const handleFileChange = (
     event: React.ChangeEvent<HTMLInputElement>,
     uploadType: UploadType
@@ -131,13 +148,16 @@ export default function Home() {
     }));
   };
   return (
-    <main className="container">
+    <main className="container max-w-screen-lg mx-auto">
+      <h2 className="font-semibold text-xl text-gray-600">Conversion Tracker Form</h2>
+      <p className="text-gray-500 mb-6">Fill the form with relevant details to create a ticket.</p>
       <Formik
         initialValues={formInitalValues}
         onSubmit={onSubmit}
         enableReinitialize={true}
+        validationSchema={validationSchema}
       >
-        {({ values, setFieldValue }) => {
+        {({ values, setFieldValue, isSubmitting }) => {
           return (
             <Form>
               <div className="bg-white rounded shadow-lg p-4 px-4 md:p-8 mb-6">
@@ -215,12 +235,17 @@ export default function Home() {
                       <RegularTextfield
                         label={"Mouza"}
                         id={"mouza"}
-                        additionalStyle={{ div: "md:col-span-3" }}
+                        additionalStyle={{ div: "md:col-span-2" }}
                       />
                       <RegularTextfield
                         label={"Tahsil"}
                         id={"tahsil"}
                         additionalStyle={{ div: "md:col-span-2" }}
+                      />
+                      <RegularTextfield
+                        label={"Khata No."}
+                        id={"khata"}
+                        additionalStyle={{ div: "md:col-span-1" }}
                       />
                       <RegularTextfield
                         label={"Application Fees Id"}
@@ -230,24 +255,19 @@ export default function Home() {
                       <RegularDatePicker
                         label={"Application Date"}
                         id={"application_entry_date"}
-                        additionalStyle={{ div: "md:col-span-1" }}
+                        additionalStyle={{ div: "md:col-span-2" }}
                       />
                       <RegularTextfield
                         label={"Application Fees"}
                         id={"application_fees_amount"}
-                        additionalStyle={{ div: "md:col-span-1" }}
+                        additionalStyle={{ div: "md:col-span-2" }}
                         leftView={
                           <span className="text-gray-500 sm:text-sm">₹</span>
                         }
                       />
-                      <RegularTextfield
-                        label={"Khata No."}
-                        id={"khata"}
-                        additionalStyle={{ div: "md:col-span-1" }}
-                      />
                     </div>
                     <div className="md:col-span-5">
-                      <div className="inline-flex items-center">
+                      <div className="inline-flex items-center mt-4">
                         <input
                           type="checkbox"
                           name="ready_for_conversion"
@@ -273,6 +293,7 @@ export default function Home() {
                           <button
                             type="submit"
                             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                            disabled={isSubmitting}
                           >
                             Submit
                           </button>
@@ -321,6 +342,7 @@ export default function Home() {
                         <button
                           type="submit"
                           className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                          disabled={isSubmitting}
                         >
                           Submit
                         </button>
