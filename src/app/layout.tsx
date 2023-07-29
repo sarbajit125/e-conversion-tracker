@@ -1,7 +1,10 @@
+import RegularNavLinks from "@/components/RegularNavLinks";
 import "./globals.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-
+import DashboardLogo from "@/components/svgComponent/DashboardLogo";
+import CreateTicketLogo from "@/components/svgComponent/CreateTicketLogo";
+import Image from "next/image";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -36,9 +39,9 @@ export default function RootLayout({
                       xmlns="http://www.w3.org/2000/svg"
                     >
                       <path
-                        fill-rule="evenodd"
+                        fillRule="evenodd"
                         d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h6a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
-                        clip-rule="evenodd"
+                        clipRule="evenodd"
                       ></path>
                     </svg>
                     <svg
@@ -49,9 +52,9 @@ export default function RootLayout({
                       xmlns="http://www.w3.org/2000/svg"
                     >
                       <path
-                        fill-rule="evenodd"
+                        fillRule="evenodd"
                         d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                        clip-rule="evenodd"
+                        clipRule="evenodd"
                       ></path>
                     </svg>
                   </button>
@@ -59,8 +62,12 @@ export default function RootLayout({
                     href="#"
                     className="text-xl font-bold flex items-center lg:ml-2.5"
                   >
-                    <img
-                      src="https://demo.themesberg.com/windster/images/logo.svg"
+                    <Image
+                      src={
+                        "https://demo.themesberg.com/windster/images/logo.svg"
+                      }
+                      width={25}
+                      height={30}
                       className="h-6 mr-2"
                       alt="Windster Logo"
                     />
@@ -168,7 +175,7 @@ export default function RootLayout({
         <div className="flex overflow-hidden bg-white pt-16">
           <aside
             id="sidebar"
-            className="fixed hidden z-20 h-full top-0 left-0 pt-16 lg:flex flex-shrink-0 flex-col w-64 transition-width duration-75"
+            className="fixed hidden z-20 h-full top-0 left-0 pt-16 lg:flex flex-shrink-0 flex-col w-59  transition-width duration-75"
             aria-label="Sidebar"
           >
             <div className="relative flex-1 flex flex-col min-h-0 border-r border-gray-200 bg-white pt-0">
@@ -176,21 +183,20 @@ export default function RootLayout({
                 <div className="flex-1 px-3 bg-white divide-y space-y-1">
                   <ul className="space-y-2 pb-2">
                     <li>
-                      <a
-                        href="#"
-                        className="text-base text-gray-900 font-normal rounded-lg flex items-center p-2 hover:bg-gray-100 group"
-                      >
-                        <svg
-                          className="w-6 h-6 text-gray-500 group-hover:text-gray-900 transition duration-75"
-                          fill="currentColor"
-                          viewBox="0 0 20 20"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z"></path>
-                          <path d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z"></path>
-                        </svg>
-                        <span className="ml-3">Dashboard</span>
-                      </a>
+                      <RegularNavLinks
+                        svg={<DashboardLogo />}
+                        path={"/"}
+                        id={"dashboard"}
+                        linkName={"Dashboard"}
+                      />
+                    </li>
+                    <li>
+                      <RegularNavLinks
+                        svg={<CreateTicketLogo />}
+                        path={"/about"}
+                        id={"createTicket"}
+                        linkName={"Create Ticket"}
+                      />
                     </li>
                   </ul>
                 </div>

@@ -149,8 +149,10 @@ export default function Home() {
   };
   return (
     <main className="container max-w-screen-lg mx-auto">
+      <div className="px-4 p-4">
       <h2 className="font-semibold text-xl text-gray-600">Conversion Tracker Form</h2>
       <p className="text-gray-500 mb-6">Fill the form with relevant details to create a ticket.</p>
+      </div>
       <Formik
         initialValues={formInitalValues}
         onSubmit={onSubmit}
