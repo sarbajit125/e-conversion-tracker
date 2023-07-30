@@ -1,3 +1,5 @@
+import DashboardCard from "@/components/DashboardCard";
+import DashboardUserRow from "@/components/DashboardUserRow";
 import UpwardArrowIcon from "@/components/svgComponent/UpwardArrowIcon";
 import Link from "next/link";
 
@@ -5,7 +7,7 @@ export default function Home() {
   return (
     <div
       id="main-content"
-      className="h-full w-full bg-gray-50 relative overflow-y-auto lg:ml-64"
+      className="h-full w-full bg-gray-50 relative overflow-y-auto lg:ml-60"
     >
       <main>
         <div className="pt-6 px-4">
@@ -78,7 +80,9 @@ export default function Home() {
                             <tr>
                               <td className="p-4 whitespace-nowrap text-sm font-normal text-gray-900">
                                 Payment from{" "}
-                                <span className="font-semibold">Bonnie Green</span>
+                                <span className="font-semibold">
+                                  Bonnie Green
+                                </span>
                               </td>
                               <td className="p-4 whitespace-nowrap text-sm font-normal text-gray-500">
                                 Apr 23 ,2021
@@ -93,6 +97,46 @@ export default function Home() {
                     </div>
                   </div>
                 </div>
+              </div>
+            </div>
+          </div>
+          <div className="mt-4 w-full grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+            <DashboardCard
+              title={"New products this week"}
+              desc={"2,340"}
+              value={"14.6%"}
+              isPositive={true}
+            />
+            <DashboardCard
+              title={"Visitors this week"}
+              desc={"5,355"}
+              value={"32.9%"}
+              isPositive={true}
+            />
+            <DashboardCard
+              title={"User signups this week"}
+              desc={"5,355"}
+              value={"-2.7%"}
+              isPositive={false}
+            />
+          </div>
+          <div className="grid grid-cols-1 2xl:grid-cols-2 xl:gap-4 my-4">
+            <div className="bg-white shadow rounded-lg mb-4 p-4 sm:p-6 h-full">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-xl font-bold leading-none text-gray-900">
+                  Latest Customers
+                </h3>
+                <Link
+                  href="#"
+                  className="text-sm font-medium text-cyan-600 hover:bg-gray-100 rounded-lg inline-flex items-center p-2"
+                >
+                  View all
+                </Link>
+              </div>
+              <div className="flow-root">
+              <ul role="list" className="divide-y divide-gray-200">
+                <DashboardUserRow fullname={"Sarbajit Biswal"} recentTransaction={"1234"} />
+              </ul>
               </div>
             </div>
           </div>

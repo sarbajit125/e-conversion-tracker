@@ -92,7 +92,7 @@ export default function RootLayout({
                           xmlns="http://www.w3.org/2000/svg"
                         >
                           <path
-                            fill-rule="evenodd"
+                            fillRule="evenodd"
                             d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
                             clipRule="evenodd"
                           ></path>
@@ -122,7 +122,7 @@ export default function RootLayout({
                       xmlns="http://www.w3.org/2000/svg"
                     >
                       <path
-                        fill-rule="evenodd"
+                        fillRule="evenodd"
                         d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
                         clipRule="evenodd"
                       ></path>
@@ -175,7 +175,7 @@ export default function RootLayout({
         <div className="flex overflow-hidden bg-white pt-16">
           <aside
             id="sidebar"
-            className="fixed hidden z-20 h-full top-0 left-0 pt-16 lg:flex flex-shrink-0 flex-col w-59  transition-width duration-75"
+            className="fixed hidden z-20 h-full top-0 left-0 pt-16 lg:flex flex-shrink-0 flex-col w-60  transition-width duration-75"
             aria-label="Sidebar"
           >
             <div className="relative flex-1 flex flex-col min-h-0 border-r border-gray-200 bg-white pt-0">
@@ -204,8 +204,8 @@ export default function RootLayout({
             </div>
           </aside>
           <div className="bg-gray-900 opacity-50 hidden fixed inset-0 z-10" id="sidebarBackdrop"></div>
+          {children}
         </div>
-        {children}
       </body>
     </html>
   );

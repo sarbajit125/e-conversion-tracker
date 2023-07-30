@@ -149,7 +149,7 @@ export default function Home() {
     }));
   };
   return (
-    <main className="container max-w-screen-lg mx-auto">
+    <main className="container max-w-screen-lg mx-auto lg: ml-60">
       <div className="px-4 p-4">
         <h2 className="font-semibold text-xl text-gray-600">
           Conversion Tracker Form
