@@ -94,7 +94,7 @@ export default function RootLayout({
                           <path
                             fill-rule="evenodd"
                             d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
-                            clip-rule="evenodd"
+                            clipRule="evenodd"
                           ></path>
                         </svg>
                       </div>
@@ -124,7 +124,7 @@ export default function RootLayout({
                       <path
                         fill-rule="evenodd"
                         d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
-                        clip-rule="evenodd"
+                        clipRule="evenodd"
                       ></path>
                     </svg>
                   </button>
@@ -193,7 +193,7 @@ export default function RootLayout({
                     <li>
                       <RegularNavLinks
                         svg={<CreateTicketLogo />}
-                        path={"/about"}
+                        path={"/create-ticket"}
                         id={"createTicket"}
                         linkName={"Create Ticket"}
                       />
@@ -203,6 +203,7 @@ export default function RootLayout({
               </div>
             </div>
           </aside>
+          <div className="bg-gray-900 opacity-50 hidden fixed inset-0 z-10" id="sidebarBackdrop"></div>
         </div>
         {children}
       </body>
