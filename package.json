@@ -36,6 +36,7 @@
     "yup": "^1.2.0"
   },
   "devDependencies": {
+    "prisma": "^5.0.0",
     "raw-loader": "^4.0.2"
   }
 }

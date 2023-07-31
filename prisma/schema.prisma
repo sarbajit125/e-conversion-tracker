@@ -1,0 +1,34 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Users {
+  id String @id @default(uuid())
+  name String @unique
+  conversions Conversion_Table[]
+}
+
+model Conversion_Table {
+  application_id String @id 
+  applicant_name_id Users @relation(fields: [applicant_name], references: [name])
+  applicant_name String 
+  mouza String
+  tahsil String
+  khata String
+  ready_for_conversion Boolean @default(false)
+}
+
+model Transaction_Record_Table {
+  transaction_id String @id
+  transaction_currency String @default("INR")
+  transaction_date DateTime
+  transaction_amount Decimal
+}
