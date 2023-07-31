@@ -1,5 +1,5 @@
 import  { HTMLInputTypeAttribute, InputHTMLAttributes, ReactNode } from "react";
-
+import * as Yup from "yup";
 export interface RegularTextfieldProps
   extends InputHTMLAttributes<HTMLInputElement> {
   id: string;
@@ -27,4 +27,33 @@ export interface PDFFormSchema {
   conversion_transaction_id?: string;
   conversion_transaction_amount?: string;
   conversion_transaction_date?: string;
+}
+export const validationSchema: Yup.Schema<PDFFormSchema> = Yup.object().shape({
+  applicant_name: Yup.string().required("Mandatory field"),
+  application_id: Yup.string().required("Mandatory field"),
+  mouza: Yup.string().required("Mandatory field"),
+  tahsil: Yup.string().required("Mandatory field"),
+  khata: Yup.string().required("Mandatory field"),
+  application_transaction_id: Yup.string().required("Mandatory field"),
+  application_entry_date: Yup.string(),
+  application_fees_amount: Yup.string(),
+  conversion_case_no: Yup.string(),
+  conversion_transaction_id: Yup.string(),
+  conversion_transaction_amount: Yup.string(),
+  conversion_transaction_date: Yup.string(),
+  ready_for_conversion: Yup.boolean().required(),
+});
+
+export class APiErrorResp extends Error {
+    userMsg: string
+    timeStamp: string
+    constructor(userMsg: string, timeStamp: string = Date(), message?: string) {
+      super(message)
+      this.userMsg = userMsg
+      this.timeStamp = timeStamp
+    }
+}
+export interface APISuccessResp {
+  message: string
+  timeStamp: string
 }

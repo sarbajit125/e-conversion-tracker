@@ -24,6 +24,8 @@ model Conversion_Table {
   tahsil String
   khata String
   ready_for_conversion Boolean @default(false)
+  conversion_case_no String?
+  conversion_transaction Transaction_Record_Table[]
 }
 
 model Transaction_Record_Table {
@@ -31,4 +33,7 @@ model Transaction_Record_Table {
   transaction_currency String @default("INR")
   transaction_date DateTime
   transaction_amount Decimal
+  conversion_id String
+  transaction_type String
+  conversion_details Conversion_Table @relation(fields: [conversion_id],references: [application_id])
 }

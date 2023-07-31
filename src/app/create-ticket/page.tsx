@@ -5,8 +5,8 @@ import React, { useState } from "react";
 import { pdfjs } from "react-pdf";
 import { Formik, Form, useFormikContext, Field } from "formik";
 import { UploadType } from "@/lib/utils";
-import * as Yup from "yup";
-import { PDFFormSchema } from "@/layouts/ComponentsStyle";
+
+import { PDFFormSchema, validationSchema } from "@/layouts/ComponentsStyle";
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 export default function Home() {
@@ -25,21 +25,7 @@ export default function Home() {
     conversion_transaction_date: "",
     ready_for_conversion: false,
   });
-  const validationSchema: Yup.Schema<PDFFormSchema> = Yup.object().shape({
-    applicant_name: Yup.string().required("Mandatory field"),
-    application_id: Yup.string().required("Mandatory field"),
-    mouza: Yup.string().required("Mandatory field"),
-    tahsil: Yup.string().required("Mandatory field"),
-    khata: Yup.string().required("Mandatory field"),
-    application_transaction_id: Yup.string().required("Mandatory field"),
-    application_entry_date: Yup.string(),
-    application_fees_amount: Yup.string(),
-    conversion_case_no: Yup.string(),
-    conversion_transaction_id: Yup.string(),
-    conversion_transaction_amount: Yup.string(),
-    conversion_transaction_date: Yup.string(),
-    ready_for_conversion: Yup.boolean().required(),
-  });
+  
   const [showConversionDiv, setConversionDiv] = useState<boolean>(false);
   const onSubmit = (values: PDFFormSchema) =>
     console.log("Form data", values.applicant_name);
