@@ -6,7 +6,13 @@ import { pdfjs } from "react-pdf";
 import { Formik, Form, useFormikContext, Field } from "formik";
 import { UploadType } from "@/lib/utils";
 
-import { PDFFormSchema, validationSchema } from "@/layouts/ComponentsStyle";
+import {
+  APiErrorResp,
+  PDFFormSchema,
+  validationSchema,
+} from "@/layouts/ComponentsStyle";
+import { useCreateTicket } from "@/query-hooks/query-hook";
+import { useToast } from "@/components/ui/use-toast";
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 export default function Home() {
@@ -25,10 +31,10 @@ export default function Home() {
     conversion_transaction_date: "",
     ready_for_conversion: false,
   });
-  
+  const pdfMutation = useCreateTicket();
+  const { toast } = useToast();
   const [showConversionDiv, setConversionDiv] = useState<boolean>(false);
-  const onSubmit = (values: PDFFormSchema) =>
-    console.log("Form data", values.applicant_name);
+  const onSubmit = (values: PDFFormSchema) => pdfMutation.mutate(values);
   const handleFileChange = (
     event: React.ChangeEvent<HTMLInputElement>,
     uploadType: UploadType
@@ -348,6 +354,25 @@ export default function Home() {
           );
         }}
       </Formik>
+      {pdfMutation.isLoading ? (
+        <div className="border-gray-300 h-20 w-20 animate-spin rounded-full border-8 border-t-blue-600" />
+      ) : null}
+      {pdfMutation.isSuccess ? (
+        <>
+          {toast({ title: "Success", description: pdfMutation.data.message })}
+        </>
+      ) : null}
+      {pdfMutation.isError ? (
+        <>
+          {toast({
+            title: "Error",
+            description:
+              pdfMutation.error instanceof APiErrorResp
+                ? pdfMutation.error.userMsg
+                : "Something went wrong",
+          })}
+        </>
+      ) : null}
     </main>
   );
 }

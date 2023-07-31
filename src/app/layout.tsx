@@ -7,8 +7,9 @@ import CreateTicketLogo from "@/components/svgComponent/CreateTicketLogo";
 import Image from "next/image";
 import SidebarMobileHamburger from "@/components/svgComponent/SidebarMobileHamburger";
 import SideBarMobileClose from "@/components/svgComponent/SideBarMobileClose";
+import { Toaster } from "@/components/ui/toaster";
+import QueryProvider from "@/query-hooks/queryProvider";
 const inter = Inter({ subsets: ["latin"] });
-
 export const metadata: Metadata = {
   title: "Bhulekh Conversion Tracker",
   description: "Track Land records conversion with ease",
@@ -22,6 +23,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
+      <QueryProvider>
         <div>
           <nav className="bg-white border-b border-gray-200 fixed z-30 w-full">
             <div className="px-3 py-3 lg:px-5 lg:pl-3">
@@ -183,7 +185,9 @@ export default function RootLayout({
           </aside>
           <div className="bg-gray-900 opacity-50 hidden fixed inset-0 z-10" id="sidebarBackdrop"></div>
           {children}
+          <Toaster />
         </div>
+        </QueryProvider>
       </body>
     </html>
   );

@@ -1,6 +1,6 @@
 import { APISuccessResp, APiErrorResp, PDFFormSchema, validationSchema } from "@/layouts/ComponentsStyle";
 import { NextResponse } from "next/server";
-import prisma from "../../../../networking/primsaInstance";
+import prisma from "../../../networking/primsaInstance";
 
 export async function POST(request: Request) {
   try {
