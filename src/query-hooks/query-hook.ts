@@ -9,6 +9,7 @@ export const useCreateTicket = () =>
   useMutation({
     mutationKey: ["create-ticket"],
     mutationFn: (data: PDFFormSchema) => {
+        console.log("coming here")
       return axiosInstance
         .post<APISuccessResp>("/api/create-ticket", data)
         .then((response) => {

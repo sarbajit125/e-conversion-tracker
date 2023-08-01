@@ -4,7 +4,10 @@ import prisma from "../../../networking/primsaInstance";
 
 export async function POST(request: Request) {
   try {
-    const result = await validationSchema.validate(request.body);
+    console.log("coming to api part")
+    const requestBody = await request.json()
+    console.log(requestBody)
+    const result = await validationSchema.validate(requestBody);
     if (result.ready_for_conversion) {
        const conversionResult = validateConversionData(result)
        if (conversionResult.isValid && conversionResult.properties != undefined) {
