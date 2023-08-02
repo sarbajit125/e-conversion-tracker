@@ -15,10 +15,10 @@ export async function POST(request: Request) {
     const result = await validationSchema.validate(requestBody);
     if (await setFormData(result)) {
       const success: APISuccessResp = {
-        message: "Successfully create the ticket",
+        message: "Successfully created the ticket",
         timeStamp: new Date().toUTCString(),
       };
-      NextResponse.json(success, { status: 201 });
+      return NextResponse.json(success, { status: 201 });
     }
   } catch (error) {
     console.log(error);
@@ -26,10 +26,18 @@ export async function POST(request: Request) {
     throw NextResponse.json(errorObj, { status: 500 });
   }
 }
+function getDateOBj(dateStr: string | undefined): Date {
+  if (dateStr != undefined) {
+    const parts = dateStr.split("/");
+    const dateObject = new Date(`${parts[2]}/${parts[1]}/${parts[0]}`);
+    return dateObject
+  } else {
+     return new Date()
+  }
+}
 async function setFormData(data: PDFFormSchema) {
   try {
-    console.log("hello world")
-    const response = prisma.conversion_Table.create({
+    const response = await prisma.conversion_Table.create({
       data: {
         application_id: data.application_id,
         khata: data.khata,
@@ -61,9 +69,7 @@ async function setFormData(data: PDFFormSchema) {
                       transaction_amount: parseFloat(
                         data.application_fees_amount ?? "0"
                       ),
-                      transaction_date: new Date(
-                        data.application_entry_date ?? new Date()
-                      ),
+                      transaction_date: getDateOBj(data.application_entry_date),
                       transaction_id: data.application_transaction_id,
                       transaction_type: "ENTRY",
                     },
@@ -71,9 +77,7 @@ async function setFormData(data: PDFFormSchema) {
                       transaction_amount: parseFloat(
                         data.conversion_transaction_amount
                       ),
-                      transaction_date: new Date(
-                        data.conversion_transaction_date
-                      ),
+                      transaction_date: getDateOBj(data.conversion_transaction_date),
                       transaction_id: data.conversion_transaction_id,
                       transaction_type: "CONVERSION",
                     },
@@ -83,9 +87,8 @@ async function setFormData(data: PDFFormSchema) {
                       transaction_amount: parseFloat(
                         data.application_fees_amount ?? "0"
                       ),
-                      transaction_date: new Date(
-                        data.application_entry_date ?? new Date()
-                      ),
+                      transaction_date: getDateOBj(data.application_entry_date)
+                      ,
                       transaction_id: data.application_transaction_id,
                       transaction_type: "ENTRY",
                     },
