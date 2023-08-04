@@ -5,15 +5,13 @@ import React, { useEffect, useState } from "react";
 import { pdfjs } from "react-pdf";
 import { Formik, Form } from "formik";
 import { UploadType } from "@/lib/utils";
-
+import { useRouter } from "next/navigation";
 import {
   APiErrorResp,
   PDFFormSchema,
   validationSchema,
 } from "@/layouts/ComponentsStyle";
-import {
-  createConversionTicket,
-} from "@/query-hooks/query-hook";
+import { createConversionTicket } from "@/query-hooks/query-hook";
 import { useMutation } from "@tanstack/react-query";
 import { useToast } from "@/components/ui/use-toast";
 
@@ -34,13 +32,26 @@ export default function CreateForm() {
     conversion_transaction_date: "",
     ready_for_conversion: false,
   });
-  const {toast} = useToast()
+  const { toast } = useToast();
+  const { push } = useRouter();
   const pdfMutation = useMutation({
     mutationKey: ["create-ticket"],
     mutationFn: (data: PDFFormSchema) => createConversionTicket(data),
     onError(error, variables, context) {
       console.log("Error coming here");
-      toast({title: pdfMutation.error instanceof APiErrorResp ? pdfMutation.error.userMsg : ""})
+      toast({
+        title: "Error",
+        description: error instanceof APiErrorResp ? error.userMsg : "",
+        variant: "destructive",
+      });
+    },
+    onSuccess(data, variables, context) {
+      toast({
+        title: "Success",
+        description: data.message,
+        variant: "default",
+      });
+      push("/");
     },
   });
   const [showConversionDiv, setConversionDiv] = useState<boolean>(false);
@@ -166,9 +177,9 @@ export default function CreateForm() {
         enableReinitialize={true}
         validationSchema={validationSchema}
       >
-        {({ values, setFieldValue, isSubmitting }) => {
+        {({ values, setFieldValue, isSubmitting, handleSubmit }) => {
           return (
-            <Form>
+            <Form onSubmit={handleSubmit}>
               <div className="bg-white rounded shadow-lg p-4 px-4 md:p-8 mb-6">
                 <div className="grid gap-4 gap-y-2 text-sm grid-cols-1 lg:grid-cols-3">
                   <div className="text-gray-600">
@@ -302,7 +313,6 @@ export default function CreateForm() {
                           <button
                             type="submit"
                             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                            disabled={isSubmitting}
                           >
                             Submit
                           </button>
@@ -351,7 +361,6 @@ export default function CreateForm() {
                         <button
                           type="submit"
                           className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                          disabled={isSubmitting}
                         >
                           Submit
                         </button>

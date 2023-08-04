@@ -22,8 +22,8 @@ export async function POST(request: Request) {
       return NextResponse.json(success, { status: 201 });
     }
   } catch (error) {
-    console.log(error);
     const errorObj = handleErrorInServer(error)
+    console.log(errorObj)
     return NextResponse.json(errorObj, { status: 400 });
   }
 }
@@ -33,7 +33,7 @@ function getDateOBj(dateStr: string | undefined): Date {
     const dateObject = new Date(`${parts[2]}/${parts[1]}/${parts[0]}`);
     return dateObject
   } else {
-     return new Date()
+    return new Date()
   }
 }
 async function setFormData(data: PDFFormSchema) {
@@ -88,7 +88,7 @@ async function setFormData(data: PDFFormSchema) {
                       transaction_amount: parseFloat(
                         data.application_fees_amount ?? "0"
                       ),
-                      transaction_date: new Date(data.application_entry_date)
+                      transaction_date: getDateOBj(data.application_entry_date)
                       ,
                       transaction_id: data.application_transaction_id,
                       transaction_type: "ENTRY",
@@ -107,7 +107,7 @@ async function setFormData(data: PDFFormSchema) {
 
 export const handleErrorInServer = (error: unknown): APiErrorResp => {
   let errorMsg = ""
-  console.log(error);
+  // console.log(error);
   if (error instanceof Prisma.PrismaClientKnownRequestError) {
     console.log(error.code)
     errorMsg = error.message
