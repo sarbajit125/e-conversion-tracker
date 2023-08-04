@@ -1,9 +1,9 @@
 "use client";
 import RegularDatePicker from "@/components/RegularDatePicker";
 import RegularTextfield from "@/components/RegularTextfield";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { pdfjs } from "react-pdf";
-import { Formik, Form, useFormikContext, Field } from "formik";
+import { Formik, Form } from "formik";
 import { UploadType } from "@/lib/utils";
 
 import {
@@ -11,11 +11,14 @@ import {
   PDFFormSchema,
   validationSchema,
 } from "@/layouts/ComponentsStyle";
-import { useCreateTicket } from "@/query-hooks/query-hook";
+import {
+  createConversionTicket,
+} from "@/query-hooks/query-hook";
+import { useMutation } from "@tanstack/react-query";
 import { useToast } from "@/components/ui/use-toast";
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
-export default function Home() {
+export default function CreateForm() {
   const [formInitalValues, setInitalValues] = useState<PDFFormSchema>({
     applicant_name: "",
     application_id: "",
@@ -31,8 +34,15 @@ export default function Home() {
     conversion_transaction_date: "",
     ready_for_conversion: false,
   });
-  const pdfMutation = useCreateTicket();
-  const { toast } = useToast();
+  const {toast} = useToast()
+  const pdfMutation = useMutation({
+    mutationKey: ["create-ticket"],
+    mutationFn: (data: PDFFormSchema) => createConversionTicket(data),
+    onError(error, variables, context) {
+      console.log("Error coming here");
+      toast({title: pdfMutation.error instanceof APiErrorResp ? pdfMutation.error.userMsg : ""})
+    },
+  });
   const [showConversionDiv, setConversionDiv] = useState<boolean>(false);
   const onSubmit = (values: PDFFormSchema) => pdfMutation.mutate(values);
   const handleFileChange = (
@@ -356,22 +366,6 @@ export default function Home() {
       </Formik>
       {pdfMutation.isLoading ? (
         <div className="border-gray-300 h-20 w-20 animate-spin rounded-full border-8 border-t-blue-600" />
-      ) : null}
-      {pdfMutation.isSuccess ? (
-        <>
-          {toast({ title: "Success", description: pdfMutation.data.message })}
-        </>
-      ) : null}
-      {pdfMutation.isError ? (
-        <>
-          {toast({
-            title: "Error",
-            description:
-              pdfMutation.error instanceof APiErrorResp
-                ? pdfMutation.error.userMsg
-                : "Something went wrong",
-          })}
-        </>
       ) : null}
     </main>
   );

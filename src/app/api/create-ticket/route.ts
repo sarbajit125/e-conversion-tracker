@@ -6,6 +6,7 @@ import {
 } from "@/layouts/ComponentsStyle";
 import { NextResponse } from "next/server";
 import prisma from "../../../networking/primsaInstance";
+import { Prisma } from "@prisma/client";
 
 export async function POST(request: Request) {
   try {
@@ -22,8 +23,8 @@ export async function POST(request: Request) {
     }
   } catch (error) {
     console.log(error);
-    const errorObj = new APiErrorResp("Something went wrong");
-    throw NextResponse.json(errorObj, { status: 500 });
+    const errorObj = handleErrorInServer(error)
+    return NextResponse.json(errorObj, { status: 400 });
   }
 }
 function getDateOBj(dateStr: string | undefined): Date {
@@ -87,7 +88,7 @@ async function setFormData(data: PDFFormSchema) {
                       transaction_amount: parseFloat(
                         data.application_fees_amount ?? "0"
                       ),
-                      transaction_date: getDateOBj(data.application_entry_date)
+                      transaction_date: new Date(data.application_entry_date)
                       ,
                       transaction_id: data.application_transaction_id,
                       transaction_type: "ENTRY",
@@ -99,8 +100,27 @@ async function setFormData(data: PDFFormSchema) {
     });
     return true;
   } catch (error) {
-    console.log("error from here")
-    console.log(error);
-    throw error;
+    throw handleErrorInServer(error)
   }
+}
+
+
+export const handleErrorInServer = (error: unknown): APiErrorResp => {
+  let errorMsg = ""
+  console.log(error);
+  if (error instanceof Prisma.PrismaClientKnownRequestError) {
+    console.log(error.code)
+    errorMsg = error.message
+  } else if (error instanceof Prisma.PrismaClientUnknownRequestError) {
+    console.log(error.name)
+    errorMsg = error.message
+  } else if (error instanceof Prisma.PrismaClientValidationError) {
+    errorMsg = "Validation failed for single/multiple fields"
+  } else if (error instanceof APiErrorResp) {
+    return error
+  } else {
+    errorMsg = "Error in server side"
+  }
+  let errObj = new APiErrorResp(errorMsg)
+  return errObj
 }

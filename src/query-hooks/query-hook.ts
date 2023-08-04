@@ -4,26 +4,29 @@ import {
   PDFFormSchema,
 } from "@/layouts/ComponentsStyle";
 import axiosInstance from "@/networking/axiosInstance";
-import { useMutation } from "@tanstack/react-query";
-export const useCreateTicket = () =>
-  useMutation({
-    mutationKey: ["create-ticket"],
-    mutationFn: (data: PDFFormSchema) => {
-      return axiosInstance
-        .post<APISuccessResp>("/api/create-ticket", data)
-        .then((response) => {
-          return response.data;
-        })
-        .catch((err) => {
-          throw handleAPIError(err);
-        });
-    },
-  });
 
 const handleAPIError = (err: unknown) => {
+  console.log("Coming Error 2");
   if (err instanceof APiErrorResp) {
+    console.log("Coming Error 3");
     return err;
   } else {
+    console.log("Coming Error 4");
     return new APiErrorResp("Something went wrong");
+  }
+};
+
+export const createConversionTicket = async (
+  data: PDFFormSchema
+): Promise<APISuccessResp> => {
+  try {
+    const response = await axiosInstance.post<APISuccessResp>(
+      "/api/create-ticket",
+      data
+    );
+    return response.data;
+  } catch (error) {
+    console.log("Coming Error 1");
+    throw handleAPIError(error);
   }
 };
