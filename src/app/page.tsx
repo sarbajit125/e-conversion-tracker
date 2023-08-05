@@ -134,10 +134,15 @@ export default async function Home() {
               </div>
               <div className="flow-root">
                 <ul role="list" className="divide-y divide-gray-200">
-                  <DashboardUserRow
-                    fullname={"Sarbajit Biswal"}
-                    recentTransaction={"1234"}
-                  />
+                  {responseData.recentCustomer.map((item, index) => (
+                    <DashboardUserRow
+                      key={index.toString()}
+                      fullname={item.user}
+                      recentTransaction={item.amount}
+                      currencyCode={item.currencyCode}
+                      serviceType={item.serviceType}
+                    />
+                  ))}
                 </ul>
               </div>
             </div>

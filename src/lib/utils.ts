@@ -29,6 +29,14 @@ export function formatAmount(amount: number, currency: string) {
   
   return formattedAmount;
 }
+export const getServiceName = (code: string): string => {
+  switch(code) {
+    case "ENTRY":
+      return "Conversion Initiation"
+    default:
+      return "Conversion Completion"
+  }
+}
 // [
 //   "Application Details",
 //   "",
