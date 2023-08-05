@@ -16,8 +16,8 @@ export default async function Home() {
     >
       <main>
         <div className="pt-6 px-4">
-          <div className="w-full grid grid-cols-1 xl:grid-cols-2 2xl:grid-cols-3 gap-4">
-            <div className="bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8  2xl:col-span-2">
+          <div className="w-full grid grid-cols-1 xl:grid-cols-2 2xl:grid-cols-2 gap-4">
+            <div className="bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8  ">
               <div className="flex items-center justify-between mb-4">
                 <div className="flex-shrink-0">
                   <span className="text-2xl sm:text-3xl leading-none font-bold text-gray-900">
@@ -32,7 +32,7 @@ export default async function Home() {
                   <UpwardArrowIcon />
                 </div>
               </div>
-              <div id="main-chart"></div>
+              <div id="main-chart" style={{width: '518'}}></div>
             </div>
             <div>
               <div className="bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8">
@@ -119,7 +119,7 @@ export default async function Home() {
               isPositive={false}
             />
           </div>
-          <div className="grid grid-cols-1 2xl:grid-cols-2 xl:gap-4 my-4">
+          <div className="grid grid-cols-1 2xl:grid-cols-1 xl:gap-4 my-4">
             <div className="bg-white shadow rounded-lg mb-4 p-4 sm:p-6 h-full">
               <div className="flex items-center justify-between mb-4">
                 <h3 className="text-xl font-bold leading-none text-gray-900">
