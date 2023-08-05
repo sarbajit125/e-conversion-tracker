@@ -1,9 +1,14 @@
 import DashboardCard from "@/components/DashboardCard";
+import DashboardTransactionRow from "@/components/DashboardTransactionRow";
 import DashboardUserRow from "@/components/DashboardUserRow";
 import UpwardArrowIcon from "@/components/svgComponent/UpwardArrowIcon";
+import {
+  axiosDashboardData,
+  fetchDashboardData,
+} from "@/query-hooks/query-hook";
 import Link from "next/link";
-
-export default function Home() {
+export default async function Home() {
+  const responseData = await fetchDashboardData();
   return (
     <div
       id="main-content"
@@ -77,20 +82,14 @@ export default function Home() {
                             </tr>
                           </thead>
                           <tbody className="bg-white">
-                            <tr>
-                              <td className="p-4 whitespace-nowrap text-sm font-normal text-gray-900">
-                                Payment from{" "}
-                                <span className="font-semibold">
-                                  Bonnie Green
-                                </span>
-                              </td>
-                              <td className="p-4 whitespace-nowrap text-sm font-normal text-gray-500">
-                                Apr 23 ,2021
-                              </td>
-                              <td className="p-4 whitespace-nowrap text-sm font-semibold text-gray-900">
-                                $2300
-                              </td>
-                            </tr>
+                            {responseData.recentTransaction.map(
+                              (item, index) => (
+                                <DashboardTransactionRow
+                                  key={index.toString()}
+                                  data={item}
+                                />
+                              )
+                            )}
                           </tbody>
                         </table>
                       </div>
@@ -134,9 +133,12 @@ export default function Home() {
                 </Link>
               </div>
               <div className="flow-root">
-              <ul role="list" className="divide-y divide-gray-200">
-                <DashboardUserRow fullname={"Sarbajit Biswal"} recentTransaction={"1234"} />
-              </ul>
+                <ul role="list" className="divide-y divide-gray-200">
+                  <DashboardUserRow
+                    fullname={"Sarbajit Biswal"}
+                    recentTransaction={"1234"}
+                  />
+                </ul>
               </div>
             </div>
           </div>

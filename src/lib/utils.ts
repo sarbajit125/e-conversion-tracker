@@ -10,6 +10,25 @@ export enum UploadType {
   Acknowledgement=1,
   Conversion=2
 }
+
+export const getCurrencySymbol = (code: string): string => {
+  switch (code) {
+    case "INR":
+      return "₹";
+    default:
+      return "$";
+  }
+}
+export const recentDateDisplayFormat = 'MMMM DD, YYYY'
+
+export function formatAmount(amount: number, currency: string) {
+  const formattedAmount = new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: currency,
+  }).format(amount);
+  
+  return formattedAmount;
+}
 // [
 //   "Application Details",
 //   "",

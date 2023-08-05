@@ -1,3 +1,4 @@
+import { DashboardResp } from "@/app/api/route";
 import {
   APISuccessResp,
   APiErrorResp,
@@ -32,3 +33,24 @@ export const createConversionTicket = async (
     throw handleAPIError(error);
   }
 };
+
+export const axiosDashboardData = async (): Promise<DashboardResp> => {
+  try {
+    const response = await axiosInstance.get<DashboardResp>('/api');
+    return response.data
+  } catch (error) {
+    throw handleAPIError(error);
+  }
+}
+export const fetchDashboardData = async (): Promise<DashboardResp> => {
+  try {
+    const response = await fetch('http://localhost:3000/api')
+    if(!response.ok) {
+      throw new APiErrorResp('Response code not matching');
+    } else {
+      return  await response.json() as Promise<DashboardResp>
+    }
+  } catch (error) {
+    throw handleAPIError(error);
+  }
+}
