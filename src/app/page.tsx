@@ -1,6 +1,7 @@
 import DashboardCard from "@/components/DashboardCard";
 import DashboardTransactionRow from "@/components/DashboardTransactionRow";
 import DashboardUserRow from "@/components/DashboardUserRow";
+import DownwardArrowIcon from "@/components/svgComponent/DownwardArrowIcon";
 import UpwardArrowIcon from "@/components/svgComponent/UpwardArrowIcon";
 import {
   axiosDashboardData,
@@ -21,18 +22,28 @@ export default async function Home() {
               <div className="flex items-center justify-between mb-4">
                 <div className="flex-shrink-0">
                   <span className="text-2xl sm:text-3xl leading-none font-bold text-gray-900">
-                    $45,385
+                    {responseData.completedConversion.value.toLocaleString()}
                   </span>
                   <h3 className="text-base font-normal text-gray-500">
-                    Sales this week
+                    Completed conversion this week
                   </h3>
                 </div>
-                <div className="flex items-center justify-end flex-1 text-green-500 text-base font-bold">
-                  12.5%
-                  <UpwardArrowIcon />
+                <div
+                  className={`flex items-center justify-end flex-1 ${
+                    responseData.completedConversion.isPostive
+                      ? "text-green-500"
+                      : "text-red-500"
+                  } text-base font-bold`}
+                >
+                  {responseData.completedConversion.growth.toLocaleString()}%
+                  {responseData.completedConversion.isPostive ? (
+                    <UpwardArrowIcon />
+                  ) : (
+                    <DownwardArrowIcon />
+                  )}
                 </div>
               </div>
-              <div id="main-chart" style={{width: '518'}}></div>
+              <div id="main-chart" style={{ width: "518" }}></div>
             </div>
             <div>
               <div className="bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8">
@@ -101,21 +112,21 @@ export default async function Home() {
           </div>
           <div className="mt-4 w-full grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
             <DashboardCard
-              title={"New products this week"}
-              desc={"2,340"}
-              value={"14.6%"}
+              title={"New applications this week"}
+              desc={responseData.initatedConverison.value}
+              value={responseData.initatedConverison.growth}
+              isPositive={responseData.initatedConverison.isPostive}
+            />
+            <DashboardCard
+              title={"Sale-deed bookings this week"}
+              desc={5355}
+              value={32.9}
               isPositive={true}
             />
             <DashboardCard
-              title={"Visitors this week"}
-              desc={"5,355"}
-              value={"32.9%"}
-              isPositive={true}
-            />
-            <DashboardCard
-              title={"User signups this week"}
-              desc={"5,355"}
-              value={"-2.7%"}
+              title={"E-pauti deposits this week"}
+              desc={5355}
+              value={2.7}
               isPositive={false}
             />
           </div>

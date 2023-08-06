@@ -11,7 +11,7 @@ const handleAPIError = (err: unknown) => {
   console.log("Coming Error 2");
   if (err instanceof AxiosError) {
     console.log("Coming Error 3");
-    const errObj = new APiErrorResp(err.response?.data.userMsg)
+    const errObj = new APiErrorResp(err.response?.data.userMsg);
     return errObj;
   } else {
     console.log("Coming Error 4");
@@ -36,21 +36,23 @@ export const createConversionTicket = async (
 
 export const axiosDashboardData = async (): Promise<DashboardResp> => {
   try {
-    const response = await axiosInstance.get<DashboardResp>('/api');
-    return response.data
+    const response = await axiosInstance.get<DashboardResp>("/api");
+    return response.data;
   } catch (error) {
     throw handleAPIError(error);
   }
-}
+};
 export const fetchDashboardData = async (): Promise<DashboardResp> => {
   try {
-    const response = await fetch('http://localhost:3000/api')
-    if(!response.ok) {
-      throw new APiErrorResp('Response code not matching');
+    const response = await fetch("http://localhost:3000/api", {
+      next: { revalidate: 3600, tags: ["dashboard"] },
+    });
+    if (!response.ok) {
+      throw new APiErrorResp("Response code not matching");
     } else {
-      return  await response.json() as Promise<DashboardResp>
+      return (await response.json()) as Promise<DashboardResp>;
     }
   } catch (error) {
     throw handleAPIError(error);
   }
-}
+};
