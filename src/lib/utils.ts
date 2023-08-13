@@ -37,6 +37,21 @@ export const getServiceName = (code: string): string => {
       return "Conversion Completion"
   }
 }
+export const getUserInitials = (fullname: string): string => {
+  let initials = "";
+  const nameArr: string[] = fullname.split(" ");
+  const firstNameFirst = nameArr[0].charAt(0).toUpperCase();
+  initials = firstNameFirst;
+  if (nameArr.length > 0) {
+    const lastNameFirst = nameArr[nameArr.length - 1].charAt(0).toUpperCase();
+    initials += lastNameFirst;
+  }
+  return initials;
+};
+
+export interface SVGIconProps {
+  classname?: string
+}
 // [
 //   "Application Details",
 //   "",

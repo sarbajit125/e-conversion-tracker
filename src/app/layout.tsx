@@ -10,6 +10,7 @@ import SideBarMobileClose from "@/components/svgComponent/SideBarMobileClose";
 import QueryProvider from "@/query-hooks/queryProvider";
 import ToastProvider from "@/query-hooks/toastProvider";
 import { Toaster } from "@/components/ui/toaster";
+import SearchIcon from "@/components/svgComponent/SearchIcon";
 const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: "Bhulekh Conversion Tracker",
@@ -178,6 +179,14 @@ export default function RootLayout({
                             path={"/create-ticket"}
                             id={"createTicket"}
                             linkName={"Create Ticket"}
+                          />
+                        </li>
+                        <li>
+                          <RegularNavLinks
+                            svg={<SearchIcon />}
+                            path={"/search-ticket"}
+                            id={"searchTicket"}
+                            linkName={"Search Ticket"}
                           />
                         </li>
                       </ul>

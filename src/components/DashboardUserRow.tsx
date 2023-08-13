@@ -1,4 +1,4 @@
-import { formatAmount, getServiceName } from "@/lib/utils";
+import { formatAmount, getServiceName, getUserInitials } from "@/lib/utils";
 import React from "react";
 
 function DashboardUserRow({
@@ -8,17 +8,6 @@ function DashboardUserRow({
   key,
   serviceType
 }: DashboardUserRowProps) {
-  const getUserInitials = (fullname: string): string => {
-    let initials = "";
-    const nameArr: string[] = fullname.split(" ");
-    const firstNameFirst = nameArr[0].charAt(0).toUpperCase();
-    initials = firstNameFirst;
-    if (nameArr.length > 0) {
-      const lastNameFirst = nameArr[nameArr.length - 1].charAt(0).toUpperCase();
-      initials += lastNameFirst;
-    }
-    return initials;
-  };
   return (
     <div className="flex items-center space-x-4" key={key}>
       <div className="flex-shrink-0">
