@@ -4,6 +4,8 @@ import {
   APISuccessResp,
   APiErrorResp,
   PDFFormSchema,
+  SearchFormSchema,
+  SearchTableResp,
 } from "@/layouts/ComponentsStyle";
 import axiosInstance from "@/networking/axiosInstance";
 import { AxiosError } from "axios";
@@ -72,6 +74,14 @@ export const fetchTicketData = async (id: string): Promise<ViewTicketResp> => {
     } else {
       return (await response.json()) as Promise<ViewTicketResp>;
     }
+  } catch (error) {
+    throw handleAPIError(error);
+  }
+}
+export const searchFromTable =async (request: SearchFormSchema): Promise<SearchTableResp[]> => {
+  try {
+    const response = await axiosInstance.post<SearchTableResp[]>("/api/search-ticket", request)
+    return response.data 
   } catch (error) {
     throw handleAPIError(error);
   }

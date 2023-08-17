@@ -1,14 +1,29 @@
 "use client";
 import DashboardSearchRow from "@/components/DashboardSearchRow";
 import { useFormik } from "formik";
+import { useMutation } from "@tanstack/react-query";
+import { SearchFormSchema } from "@/layouts/ComponentsStyle";
+import { searchFromTable } from "@/query-hooks/query-hook";
 export default function SearchTicker() {
+  const searchMutation = useMutation({
+    mutationKey: ["SearchTicket"],
+    mutationFn: (request: SearchFormSchema) => searchFromTable(request),
+    cacheTime: 0,
+  });
   const formik = useFormik({
     initialValues: {
       searchTF: "",
       recordType: "",
       sort: "desc",
     },
-    onSubmit: (values) => console.log(values),
+    onSubmit: (values) => {
+      const createRequst: SearchFormSchema = {
+        application_id: values.searchTF,
+        category: values.recordType,
+        sort: values.sort == "desc" ? true : false,
+      };
+      searchMutation.mutate(createRequst);
+    },
   });
 
   return (
@@ -85,55 +100,63 @@ export default function SearchTicker() {
       </form>
       <div className="px-4 p-4 mt-4">
         <h3 className="font-semibold text-xl text-gray-600">Query Result</h3>
-        <div id="empty-state" className="flex p-2 mt-4 justify-center">
-          <div className="flex-col">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={1.5}
-              stroke="currentColor"
-              className="self-center"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M15.182 16.318A4.486 4.486 0 0012.016 15a4.486 4.486 0 00-3.198 1.318M21 12a9 9 0 11-18 0 9 9 0 0118 0zM9.75 9.75c0 .414-.168.75-.375.75S9 10.164 9 9.75 9.168 9 9.375 9s.375.336.375.75zm-.375 0h.008v.015h-.008V9.75zm5.625 0c0 .414-.168.75-.375.75s-.375-.336-.375-.75.168-.75.375-.75.375.336.375.75zm-.375 0h.008v.015h-.008V9.75z"
-              />
-            </svg>
-            <span className="text-gray-500 mb-6 text-center">
-              No tickets found for this query
-            </span>
+        {searchMutation.isError ? (
+          <div id="empty-state" className="flex p-2 mt-4 justify-center">
+            <div className="flex-col">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                className="self-center"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M15.182 16.318A4.486 4.486 0 0012.016 15a4.486 4.486 0 00-3.198 1.318M21 12a9 9 0 11-18 0 9 9 0 0118 0zM9.75 9.75c0 .414-.168.75-.375.75S9 10.164 9 9.75 9.168 9 9.375 9s.375.336.375.75zm-.375 0h.008v.015h-.008V9.75zm5.625 0c0 .414-.168.75-.375.75s-.375-.336-.375-.75.168-.75.375-.75.375.336.375.75zm-.375 0h.008v.015h-.008V9.75z"
+                />
+              </svg>
+              <span className="text-gray-500 mb-6 text-center">
+                No tickets found for this query
+              </span>
+            </div>
           </div>
-        </div>
-        <div className="overflow-auto mt-4">
-          <table className="table text-sm bg-white rounded shadow-lg w-full">
-            <thead className=" text-gray-500">
-              <tr>
-                <th className="p-3">Name</th>
-                <th className="p-3">Category</th>
-                <th className="p-3">Application Id</th>
-                <th className="p-3">Status</th>
-                <th className="p-3">Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              <DashboardSearchRow
-                id={"123"}
-                fullName={"Sarbajit biswal"}
-                applicationId={"123"}
-                category={"Converison"}
-                actionCallback={function (
-                  id: string,
-                  type: string,
-                  action: string
-                ): void {
-                  console.log(action);
-                }}
-              />
-            </tbody>
-          </table>
-        </div>
+        ) : null}
+
+        {searchMutation.isSuccess ? (
+          <div className="overflow-auto mt-4">
+            <table className="table text-sm bg-white rounded shadow-lg w-full">
+              <thead className=" text-gray-500">
+                <tr>
+                  <th className="p-3">Name</th>
+                  <th className="p-3">Category</th>
+                  <th className="p-3">Application Id</th>
+                  <th className="p-3">Status</th>
+                  <th className="p-3">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {searchMutation.data.map((item, index) => (
+                  <DashboardSearchRow
+                    key={index}
+                    id={item.id}
+                    fullName={item.name}
+                    applicationId={item.id}
+                    category={item.category}
+                    actionCallback={function (
+                      id: string,
+                      type: string,
+                      action: string
+                    ): void {
+                      console.log(action);
+                    }}
+                  />
+                ))}
+              </tbody>
+            </table>
+          </div>
+        ) : null}
       </div>
     </main>
   );

@@ -57,3 +57,19 @@ export interface APISuccessResp {
   message: string
   timeStamp: string
 }
+export interface SearchFormSchema {
+  application_id: string;
+  category: string;
+  sort: boolean
+}
+
+export const SearchValidation: Yup.Schema<SearchFormSchema> = Yup.object().shape({
+  application_id: Yup.string().required("Mandatory field"),
+  category: Yup.string().oneOf(['conversion', 'pauti']).required("Mandatory field"),
+  sort: Yup.boolean().default(true)
+})
+export interface SearchTableResp {
+  id: string,
+  name: string,
+  category: string
+}
