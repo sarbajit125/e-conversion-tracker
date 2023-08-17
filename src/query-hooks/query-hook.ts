@@ -1,4 +1,5 @@
 import { DashboardResp } from "@/app/api/route";
+import { ViewTicketResp } from "@/app/api/view-ticket/route";
 import {
   APISuccessResp,
   APiErrorResp,
@@ -18,6 +19,8 @@ const handleAPIError = (err: unknown) => {
     return new APiErrorResp("Something went wrong");
   }
 };
+
+const serverURL = "http://localhost:3000"
 
 export const createConversionTicket = async (
   data: PDFFormSchema
@@ -44,7 +47,7 @@ export const axiosDashboardData = async (): Promise<DashboardResp> => {
 };
 export const fetchDashboardData = async (): Promise<DashboardResp> => {
   try {
-    const response = await fetch("http://localhost:3000/api", {
+    const response = await fetch(`${serverURL}/api `, {
       next: { revalidate: 3600, tags: ["dashboard"] },
     });
     if (!response.ok) {
@@ -56,3 +59,20 @@ export const fetchDashboardData = async (): Promise<DashboardResp> => {
     throw handleAPIError(error);
   }
 };
+export const fetchTicketData = async (id: string): Promise<ViewTicketResp> => {
+  try {
+    const queryParams = new URLSearchParams({
+      id: id
+    })
+    const response = await fetch(`${serverURL + "/api/view-ticket?" + queryParams.toString()}`, {
+      next: {revalidate: 0, tags:['ticketDetails']}
+    })
+    if (!response.ok) {
+      throw new APiErrorResp("Response code not matching");
+    } else {
+      return (await response.json()) as Promise<ViewTicketResp>;
+    }
+  } catch (error) {
+    throw handleAPIError(error);
+  }
+}

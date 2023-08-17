@@ -85,10 +85,7 @@ export default function SearchTicker() {
       </form>
       <div className="px-4 p-4 mt-4">
         <h3 className="font-semibold text-xl text-gray-600">Query Result</h3>
-        <div
-          id="empty-state"
-          className="flex p-2 mt-4 justify-center"
-        >
+        <div id="empty-state" className="flex p-2 mt-4 justify-center">
           <div className="flex-col">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -113,17 +110,27 @@ export default function SearchTicker() {
           <table className="table text-sm bg-white rounded shadow-lg w-full">
             <thead className=" text-gray-500">
               <tr>
-              <th className="p-3">Name</th>
-              <th className="p-3">Category</th>
-              <th className="p-3">Application Id</th>
-              <th className="p-3">Status</th>
-              <th className="p-3">Action</th>
+                <th className="p-3">Name</th>
+                <th className="p-3">Category</th>
+                <th className="p-3">Application Id</th>
+                <th className="p-3">Status</th>
+                <th className="p-3">Action</th>
               </tr>
             </thead>
             <tbody>
-              <DashboardSearchRow id={"123"} fullName={"Sarbajit biswal"} applicationId={"123"} category={"Converison"} actionCallback={function (id: string, type: string, action: string): void {
-                throw new Error("Function not implemented.");
-              } } />
+              <DashboardSearchRow
+                id={"123"}
+                fullName={"Sarbajit biswal"}
+                applicationId={"123"}
+                category={"Converison"}
+                actionCallback={function (
+                  id: string,
+                  type: string,
+                  action: string
+                ): void {
+                  console.log(action);
+                }}
+              />
             </tbody>
           </table>
         </div>
