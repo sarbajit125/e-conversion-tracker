@@ -8,8 +8,9 @@ export async function GET(request: Request) {
     try {
         const { searchParams } = new URL(request.url)
         const id = searchParams.get('id')
+        console.log(searchParams)
         if (id != null) {
-            const dataFromDB = await prisma.conversion_Table.findUniqueOrThrow({
+            const dataFromDB = await prisma.conversion_Table.findFirstOrThrow({
                 where:{
                     application_id: id
                 },
@@ -50,11 +51,6 @@ export async function GET(request: Request) {
                     value: dataFromDB.khata
                 },
                 {
-                    id: 'Detail',
-                    title: 'Conversion Case No.',
-                    value: dataFromDB.conversion_case_no ?? ""
-                },
-                {
                     id: 'Amount',
                     title: 'Application Entry Fees',
                     value: dataFromDB.conversion_transaction[0].transaction_amount.toString(),
@@ -69,6 +65,13 @@ export async function GET(request: Request) {
                 }
             ]
             if (dataFromDB.ready_for_conversion) {
+                apiData.push(
+                    {
+                        id: 'Detail',
+                        title: 'Conversion Case No.',
+                        value: dataFromDB.conversion_case_no ?? ""
+                    }
+                )
                 apiData.push({
                     id:'Detail',
                     title: 'Conversion Transaction Id',
@@ -88,6 +91,10 @@ export async function GET(request: Request) {
                     value: dayjs(dataFromDB.conversion_transaction[1].transaction_date).format(recentDateDisplayFormat).toString()
                 })
             }
+            const response: ViewTicketResp = {
+                records: apiData
+            }
+            return NextResponse.json(response, {status: 200})
         } else {
             throw new APiErrorResp('Id parameter missing')
         }

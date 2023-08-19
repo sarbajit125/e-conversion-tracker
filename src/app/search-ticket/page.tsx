@@ -4,7 +4,10 @@ import { useFormik } from "formik";
 import { useMutation } from "@tanstack/react-query";
 import { SearchFormSchema } from "@/layouts/ComponentsStyle";
 import { searchFromTable } from "@/query-hooks/query-hook";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useCallback } from "react";
 export default function SearchTicker() {
+  const router = useRouter()
   const searchMutation = useMutation({
     mutationKey: ["SearchTicket"],
     mutationFn: (request: SearchFormSchema) => searchFromTable(request),
@@ -149,7 +152,11 @@ export default function SearchTicker() {
                       type: string,
                       action: string
                     ): void {
-                      console.log(action);
+                     if (action === 'view') {
+                      const params = new URLSearchParams()
+                      params.set('id', id)
+                      router.push(`${'/view-ticket?' + params.toString()}`)
+                     }
                     }}
                   />
                 ))}

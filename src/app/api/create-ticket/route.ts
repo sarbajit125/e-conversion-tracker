@@ -107,7 +107,7 @@ async function setFormData(data: PDFFormSchema) {
 
 export const handleErrorInServer = (error: unknown): APiErrorResp => {
   let errorMsg = ""
-  // console.log(error);
+   console.log(error);
   if (error instanceof Prisma.PrismaClientKnownRequestError) {
     console.log(error.code)
     errorMsg = error.message
