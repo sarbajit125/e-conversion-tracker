@@ -10,7 +10,7 @@ import {
   PDFDownloadLink,
 } from "@react-pdf/renderer";
 import { ViewTicketResp } from "@/app/api/view-ticket/route";
-function ViewTicketFooter(props: ViewTicketResp) {
+function ViewTicketFooter(props: PrintPDFModel) {
   const [isSave, setSave] = useState<boolean>(false);
   return (
     <div className="p-4 px-4 md:p-8 mb-6 flex justify-end text-white ">
@@ -23,7 +23,7 @@ function ViewTicketFooter(props: ViewTicketResp) {
       </button>
       {isSave ? (
         <PDFDownloadLink
-          document={<PDF_REPORT_Document records={props.records} />}
+          document={<PDF_REPORT_Document records={props.records} application_id={props.application_id} />}
           fileName={"PDF_REPORT.pdf"}
         >
           {({ blob, url, loading, error }) =>
@@ -31,38 +31,61 @@ function ViewTicketFooter(props: ViewTicketResp) {
           }
         </PDFDownloadLink>
       ) : null}
+      <PDFViewer>
+        <PDF_REPORT_Document records={props.records} application_id={props.application_id} />
+      </PDFViewer>
     </div>
   );
 }
-const PDF_REPORT_Document = (props: ViewTicketResp) => {
+const PDF_REPORT_Document = (props: PrintPDFModel) => {
   const styles = StyleSheet.create({
     page: {
       backgroundColor: "#E4E4E4",
       margin: 16,
-      padding: 5,
+      marginRight:16,
+      width: "90%",
     },
-    section: {
-      margin: 10,
-      padding: 10,
-      flexGrow: 1,
+    table: {
+      margin: 25,
+      display: "flex",
+      flexWrap: "wrap",
+      flex: 1,
     },
-    table: {},
-    pageTitle:{
-      color: 'red',
+    row: {
+      width:'100%',
+      height: 80,
+      display: "flex",
+      flexDirection: "row",
+      flex:1,
+    },
+    pageTitle: {
+      color: "red",
       fontSize: 24,
     },
-    pageSubtitle:{
-      fontSize: 18
+    pageSubtitle: {
+      fontSize: 18,
     },
-    pageDesc:{
-      fontSize: 16
+    pageDesc: {
+      fontSize: 16,
     },
-    header:{
-      flex:1,
-      flexGrow:1,
-      justifyContent: 'center',
-      alignContent:'center',
+    header: {
+      display: 'flex',
+      justifyContent: "center",
+      alignItems: "center",
+      padding:15,
     },
+    col: {
+      width: "50%",
+      height:60,
+      border: 1,
+      borderColor: "black",
+      borderStyle: "solid",
+      padding:2,
+      marginHorizontal:2,
+    },
+    rowText:{
+      padding:5
+    }
   });
 
   return (
@@ -71,31 +94,29 @@ const PDF_REPORT_Document = (props: ViewTicketResp) => {
         <View style={styles.header}>
           <Text style={styles.pageTitle}>E-Conversion Tracker </Text>
           <Text style={styles.pageSubtitle}>Ticket Details</Text>
-          <Text style={styles.pageDesc}> Ticket id: 123456789</Text>
+          <Text style={styles.pageDesc}> Ticket id: {props.application_id}</Text>
         </View>
         <View style={styles.table}>
-          <table>
-            <thead>
-              <th>
-                <Text>Title</Text>
-              </th>
-              <th>
-                <Text>Description</Text>
-              </th>
-            </thead>
-            <tbody>
-              {props.records.map((item, index) => (
-                <tr key={item.id}>
-                  <th>
-                    <Text> {item.title}</Text>
-                  </th>
-                  <th>
-                    <Text> {item.value}</Text>
-                  </th>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          <View style={styles.row}>
+            <View style={styles.col}>
+              <Text style={styles.rowText}>Title</Text>
+            </View>
+            <View style={styles.col}>
+              <Text style={styles.rowText}>Description</Text>
+            </View>
+          </View>
+          {props.records.map((item, index) => (
+            <View key={index} style={styles.row}>
+              <View style={styles.row}>
+                <View style={styles.col}>
+                  <Text style={styles.rowText}>{item.title}</Text>
+                </View>
+                <View style={styles.col}>
+                  <Text style={styles.rowText}>{item.value}</Text>
+                </View>
+              </View>
+            </View>
+          ))}
         </View>
       </Page>
     </Document>
@@ -103,3 +124,6 @@ const PDF_REPORT_Document = (props: ViewTicketResp) => {
 };
 
 export default ViewTicketFooter;
+export interface PrintPDFModel extends ViewTicketResp {
+  application_id: string
+}

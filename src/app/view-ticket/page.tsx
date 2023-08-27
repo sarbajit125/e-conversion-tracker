@@ -39,7 +39,7 @@ async function Page({
           ))}
         </div>
       </div>
-      <ViewTicketFooter records={data.records} />
+      <ViewTicketFooter records={data.records} application_id={id} />
     </main>
   );
 }
