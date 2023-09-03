@@ -15,25 +15,15 @@ function ViewTicketFooter(props: PrintPDFModel) {
   return (
     <div className="p-4 px-4 md:p-8 mb-6 flex justify-end text-white ">
       <button className="p-3 mr-3 bg-slate-500 rounded">Search another</button>
-      <button
-        className="p-3 mr-3 bg-blue-500 rounded"
-        onClick={(e) => setSave(true)}
-      >
-        Print
-      </button>
-      {isSave ? (
         <PDFDownloadLink
           document={<PDF_REPORT_Document records={props.records} application_id={props.application_id} />}
           fileName={"PDF_REPORT.pdf"}
+          className="p-3 mr-3 bg-blue-500 rounded"
         >
           {({ blob, url, loading, error }) =>
-            loading ? "Report loading..." : "Report ready to download"
+            loading ? "Report loading..." : "Print"
           }
         </PDFDownloadLink>
-      ) : null}
-      <PDFViewer>
-        <PDF_REPORT_Document records={props.records} application_id={props.application_id} />
-      </PDFViewer>
     </div>
   );
 }
