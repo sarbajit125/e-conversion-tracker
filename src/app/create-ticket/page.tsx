@@ -159,6 +159,7 @@ export default function CreateForm() {
       conversion_transaction_amount: transactionAmtStr,
       conversion_transaction_date: entryDate,
       conversion_case_no: converisonCaseStr,
+      ready_for_conversion: true
     }));
   };
   return (
