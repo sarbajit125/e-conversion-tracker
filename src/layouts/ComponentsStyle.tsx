@@ -62,6 +62,14 @@ export interface SearchFormSchema {
   category: string;
   sort: boolean
 }
+export interface DeleteTicketSchema {
+  application_id: string;
+  category: string;
+}
+export const DeleteValidation: Yup.Schema<DeleteTicketSchema> = Yup.object().shape({
+  application_id: Yup.string().required("Mandatory field"),
+  category: Yup.string().oneOf(['conversion', 'pauti']).required("Mandatory field"),
+})
 
 export const SearchValidation: Yup.Schema<SearchFormSchema> = Yup.object().shape({
   application_id: Yup.string().required("Mandatory field"),
@@ -71,5 +79,6 @@ export const SearchValidation: Yup.Schema<SearchFormSchema> = Yup.object().shape
 export interface SearchTableResp {
   id: string,
   name: string,
-  category: string
+  category: string,
+  status: string
 }

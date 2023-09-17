@@ -35,5 +35,5 @@ model Transaction_Record_Table {
   transaction_amount Decimal
   conversion_id String
   transaction_type String
-  conversion_details Conversion_Table @relation(fields: [conversion_id],references: [application_id])
+  conversion_details Conversion_Table @relation(fields: [conversion_id],references: [application_id], onDelete: Cascade)
 }

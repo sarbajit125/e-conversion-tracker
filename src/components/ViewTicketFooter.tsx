@@ -11,7 +11,6 @@ import {
 } from "@react-pdf/renderer";
 import { ViewTicketResp } from "@/app/api/view-ticket/route";
 function ViewTicketFooter(props: PrintPDFModel) {
-  const [isSave, setSave] = useState<boolean>(false);
   return (
     <div className="p-4 px-4 md:p-8 mb-6 flex justify-end text-white ">
       <button className="p-3 mr-3 bg-slate-500 rounded">Search another</button>

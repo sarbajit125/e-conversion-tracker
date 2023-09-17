@@ -6,6 +6,23 @@ import {
   MdOutlineRemoveRedEye,
 } from "react-icons/md";
 function DashboardSearchRow(props: DashboardSearchRowProps) {
+  const createBadge = () => {
+    if (props.category.toLowerCase() == "conversion") {
+      if (props.status == "Initiated") {
+        return (
+          <span className="bg-yellow-100 text-yellow-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-yellow-900 dark:text-yellow-300">
+            {props.status}
+          </span>
+        );
+      } else {
+        return (
+          <span className="bg-green-100 text-green-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">
+            {props.status}
+          </span>
+        );
+      }
+    }
+  };
   return (
     <tr id={props.id}>
       <td className="p-3 text-center">
@@ -23,18 +40,16 @@ function DashboardSearchRow(props: DashboardSearchRowProps) {
         {props.applicationId}
       </td>
       <td className="p-3 text-center">
-        <span className="bg-yellow-100 text-yellow-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-yellow-900 dark:text-yellow-300">
-          Processed
-        </span>
+        {createBadge()}
       </td>
       <td className="p-3 ">
-        <div
-          className="flex justify-center"
-          onClick={(e) =>
-            props.actionCallback(props.id, props.category, "view")
-          }
-        >
-          <div className="text-gray-400 hover:text-gray-200 mr-2">
+        <div className="flex justify-center">
+          <div
+            className="text-gray-400 hover:text-gray-200 mr-2"
+            onClick={(e) =>
+              props.actionCallback(props.id, props.category, "view")
+            }
+          >
             <MdOutlineRemoveRedEye size={25} />
           </div>
           <div
@@ -66,5 +81,6 @@ export interface DashboardSearchRowProps {
   fullName: string;
   applicationId: string;
   category: string;
+  status: string;
   actionCallback: (id: string, type: string, action: string) => void;
 }

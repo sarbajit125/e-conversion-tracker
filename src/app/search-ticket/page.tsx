@@ -2,17 +2,50 @@
 import DashboardSearchRow from "@/components/DashboardSearchRow";
 import { useFormik } from "formik";
 import { useMutation } from "@tanstack/react-query";
-import { SearchFormSchema } from "@/layouts/ComponentsStyle";
-import { searchFromTable } from "@/query-hooks/query-hook";
+import {
+  APiErrorResp,
+  DeleteTicketSchema,
+  SearchFormSchema,
+} from "@/layouts/ComponentsStyle";
+import { deleteTicket, searchFromTable } from "@/query-hooks/query-hook";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useCallback } from "react";
+import { useDisclosure } from "@mantine/hooks";
+import { Modal, Text, Button, Group, LoadingOverlay } from "@mantine/core";
+import { useState } from "react";
+import { useToast } from "@/components/ui/use-toast";
+
 export default function SearchTicker() {
-  const router = useRouter()
+  const router = useRouter();
+  const { toast } = useToast();
+  const deleteMutation = useMutation({
+    mutationKey: ["deleteTicket"],
+    mutationFn: (request: DeleteTicketSchema) => deleteTicket(request),
+    onError: (error) => {
+      close()
+      toast({
+        title: "Error",
+        description: error instanceof APiErrorResp ? error.userMsg : "",
+        variant: "destructive",
+      });
+    },
+    onSuccess(data, variables, context) {
+      close()
+      toast({
+        title: "Success",
+        description: data.message,
+        variant: "default",
+      });
+    },
+  });
   const searchMutation = useMutation({
     mutationKey: ["SearchTicket"],
     mutationFn: (request: SearchFormSchema) => searchFromTable(request),
     cacheTime: 0,
   });
+  const [opened, { toggle, close }] = useDisclosure(false);
+  const [toDeleteObj, setDeleteObj] = useState<
+    DeleteTicketSchema | undefined
+  >();
   const formik = useFormik({
     initialValues: {
       searchTF: "",
@@ -147,21 +180,60 @@ export default function SearchTicker() {
                     fullName={item.name}
                     applicationId={item.id}
                     category={item.category}
+                    status={item.status}
                     actionCallback={function (
                       id: string,
                       type: string,
                       action: string
                     ): void {
-                     if (action === 'view') {
-                      const params = new URLSearchParams()
-                      params.set('id', id)
-                      router.push(`${'/view-ticket?' + params.toString()}`)
-                     }
+                      if (action === "view") {
+                        const params = new URLSearchParams();
+                        params.set("id", id);
+                        router.push(`${"/view-ticket?" + params.toString()}`);
+                      } else if (action === "delete") {
+                        setDeleteObj({ application_id: id, category: type.toLowerCase() });
+                        toggle();
+                      }
                     }}
                   />
                 ))}
               </tbody>
             </table>
+            <Modal
+              opened={opened}
+              size="lg"
+              radius="md"
+              onClose={close}
+              withCloseButton={false}
+              centered
+            >
+              <Text>
+                {" "}
+                Are you sure you want to delete this ticket ?. Please confirm
+              </Text>
+              <div className="h-1 bg-gray-400 mt-2"></div>
+              <div className="mt-1 p-2">
+                <button
+                  className="mr-2 font-bold py-2 px-4 rounded bg-red-500 hover:bg-red-700 text-white"
+                  title="Delete"
+                  onClick={() => {
+                    deleteMutation.mutate(
+                      toDeleteObj ?? { application_id: "", category: "" }
+                    )
+                  }
+                  }
+                >
+                  Delete
+                </button>
+                <button
+                  className="mr-2 font-bold py-2 px-4 rounded bg-gray-500 hover:bg-gray-700 text-white"
+                  title="Cancel"
+                  onClick={close}
+                >
+                  Cancel
+                </button>
+              </div>
+            </Modal>
           </div>
         ) : null}
       </div>

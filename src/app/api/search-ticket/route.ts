@@ -37,8 +37,9 @@ export async function POST(request: Request) {
         } else {
           const response: SearchTableResp[] =  dataFromDb.map((item) => ({
             id: item.application_id,
-            category: 'CONVERSION',
-            name: item.applicant_name
+            category: 'conversion',
+            name: item.applicant_name,
+            status: item.ready_for_conversion ? 'In Progress' : 'Initiated'
         }))
         return NextResponse.json(response, {status: 200})
         }

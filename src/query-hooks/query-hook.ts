@@ -3,6 +3,7 @@ import { ViewTicketResp } from "@/app/api/view-ticket/route";
 import {
   APISuccessResp,
   APiErrorResp,
+  DeleteTicketSchema,
   PDFFormSchema,
   SearchFormSchema,
   SearchTableResp,
@@ -78,10 +79,18 @@ export const fetchTicketData = async (id: string): Promise<ViewTicketResp> => {
     throw handleAPIError(error);
   }
 }
-export const searchFromTable =async (request: SearchFormSchema): Promise<SearchTableResp[]> => {
+export const searchFromTable = async (request: SearchFormSchema): Promise<SearchTableResp[]> => {
   try {
     const response = await axiosInstance.post<SearchTableResp[]>("/api/search-ticket", request)
     return response.data 
+  } catch (error) {
+    throw handleAPIError(error);
+  }
+}
+export const deleteTicket = async (request: DeleteTicketSchema): Promise<APISuccessResp> => {
+  try {
+    const response = await axiosInstance.post<APISuccessResp>('/api/delete-ticket', request)
+    return response.data
   } catch (error) {
     throw handleAPIError(error);
   }

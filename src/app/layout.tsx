@@ -11,6 +11,7 @@ import QueryProvider from "@/query-hooks/queryProvider";
 import ToastProvider from "@/query-hooks/toastProvider";
 import { Toaster } from "@/components/ui/toaster";
 import SearchIcon from "@/components/svgComponent/SearchIcon";
+import RootStyleRegistry from "@/query-hooks/emotion";
 const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: "Bhulekh Conversion Tracker",
@@ -27,6 +28,7 @@ export default function RootLayout({
       <body className={inter.className}>
         <QueryProvider>
           <ToastProvider>
+            <RootStyleRegistry>
             <div>
               <nav className="bg-white border-b border-gray-200 fixed z-30 w-full">
                 <div className="px-3 py-3 lg:px-5 lg:pl-3">
@@ -201,6 +203,7 @@ export default function RootLayout({
               {children}
               <Toaster />
             </div>
+            </RootStyleRegistry>
           </ToastProvider>
         </QueryProvider>
       </body>
