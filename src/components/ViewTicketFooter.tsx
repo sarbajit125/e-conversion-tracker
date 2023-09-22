@@ -10,10 +10,13 @@ import {
   PDFDownloadLink,
 } from "@react-pdf/renderer";
 import { ViewTicketResp } from "@/app/api/view-ticket/route";
+import Link from "next/link";
 function ViewTicketFooter(props: PrintPDFModel) {
   return (
     <div className="p-4 px-4 md:p-8 mb-6 flex justify-end text-white ">
+      <Link href={'search-ticket'}>
       <button className="p-3 mr-3 bg-slate-500 rounded">Search another</button>
+      </Link>
         <PDFDownloadLink
           document={<PDF_REPORT_Document records={props.records} application_id={props.application_id} />}
           fileName={"PDF_REPORT.pdf"}
@@ -115,4 +118,5 @@ const PDF_REPORT_Document = (props: PrintPDFModel) => {
 export default ViewTicketFooter;
 export interface PrintPDFModel extends ViewTicketResp {
   application_id: string
+  
 }

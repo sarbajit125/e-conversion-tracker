@@ -1,7 +1,6 @@
 import ViewTicketFooter from "@/components/ViewTicketFooter";
 import { getCurrencySymbol } from "@/lib/utils";
 import { fetchTicketData } from "@/query-hooks/query-hook";
-import { useRouter } from "next/navigation";
 import React from "react";
 async function Page({
   params,
@@ -39,7 +38,7 @@ async function Page({
           ))}
         </div>
       </div>
-      <ViewTicketFooter records={data.records} application_id={id} />
+      <ViewTicketFooter records={data.records} application_id={id}/>
     </main>
   );
 }

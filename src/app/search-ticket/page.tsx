@@ -13,6 +13,7 @@ import { useDisclosure } from "@mantine/hooks";
 import { Modal, Text, Button, Group, LoadingOverlay } from "@mantine/core";
 import { useState } from "react";
 import { useToast } from "@/components/ui/use-toast";
+import CustomOverlay from "@/components/CustomOverlay";
 
 export default function SearchTicker() {
   const router = useRouter();
@@ -64,6 +65,7 @@ export default function SearchTicker() {
 
   return (
     <main className="container max-w-screen-lg mx-auto lg: ml-60">
+      {<CustomOverlay isVisible={searchMutation.isLoading || deleteMutation.isLoading} />}
       <div className="px-4 p-4">
         <h2 className="font-semibold text-xl text-gray-600">Search Ticket</h2>
         <p className="text-gray-500 mb-6">
