@@ -85,13 +85,27 @@ export interface SearchTableResp {
 export interface EditTicketFormSchema {
   conversion_case_no: string;
   conversion_transaction_id: string;
-  conversion_transaction_amount: string;
+  conversion_transaction_amount: number;
   conversion_transaction_date: string;
 }
 export const EditTicketValidation: Yup.Schema<EditTicketFormSchema> = Yup.object().shape({
-  application_fees_amount: Yup.string().required("Mandatory field"),
+  conversion_case_no: Yup.string().required("Mandatory field"),
+  conversion_transaction_id: Yup.string().required("Mandatory field"),
+  conversion_transaction_amount: Yup.number().required("Mandatory field").typeError('Must be number'),
+  conversion_transaction_date: Yup.string().required("Mandatory field"),
+})
+export interface EditTicketRequestSchema {
+  application_id: string
+  conversion_case_no: string;
+  conversion_transaction_id: string;
+  conversion_transaction_amount: string;
+  conversion_transaction_date: string;
+}
+
+export const EditTicketRequestValidation: Yup.Schema<EditTicketRequestSchema> = Yup.object().shape({
   conversion_case_no: Yup.string().required("Mandatory field"),
   conversion_transaction_id: Yup.string().required("Mandatory field"),
   conversion_transaction_amount: Yup.string().required("Mandatory field"),
   conversion_transaction_date: Yup.string().required("Mandatory field"),
+  application_id: Yup.string().required("Mandatory field"),
 })

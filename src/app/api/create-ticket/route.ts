@@ -27,7 +27,7 @@ export async function POST(request: Request) {
     return NextResponse.json(errorObj, { status: 400 });
   }
 }
-function getDateOBj(dateStr: string | undefined): Date {
+ export function getDateOBj(dateStr: string | undefined): Date {
   if (dateStr != undefined) {
     const parts = dateStr.split("/");
     const dateObject = new Date(`${parts[2]}/${parts[1]}/${parts[0]}`);

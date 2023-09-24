@@ -14,6 +14,7 @@ import {
 import { createConversionTicket } from "@/query-hooks/query-hook";
 import { useMutation } from "@tanstack/react-query";
 import { useToast } from "@/components/ui/use-toast";
+import CustomOverlay from "@/components/CustomOverlay";
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 export default function CreateForm() {
@@ -159,11 +160,12 @@ export default function CreateForm() {
       conversion_transaction_amount: transactionAmtStr,
       conversion_transaction_date: entryDate,
       conversion_case_no: converisonCaseStr,
-      ready_for_conversion: true
+      ready_for_conversion: true,
     }));
   };
   return (
     <main className="container max-w-screen-lg mx-auto lg: ml-60">
+      {<CustomOverlay isVisible={pdfMutation.isLoading} />}
       <div className="px-4 p-4">
         <h2 className="font-semibold text-xl text-gray-600">
           Conversion Tracker Form
@@ -374,9 +376,6 @@ export default function CreateForm() {
           );
         }}
       </Formik>
-      {pdfMutation.isLoading ? (
-        <div className="border-gray-300 h-20 w-20 animate-spin rounded-full border-8 border-t-blue-600" />
-      ) : null}
     </main>
   );
 }

@@ -4,6 +4,7 @@ import {
   APISuccessResp,
   APiErrorResp,
   DeleteTicketSchema,
+  EditTicketRequestSchema,
   PDFFormSchema,
   SearchFormSchema,
   SearchTableResp,
@@ -91,6 +92,18 @@ export const deleteTicket = async (request: DeleteTicketSchema): Promise<APISucc
   try {
     const response = await axiosInstance.post<APISuccessResp>('/api/delete-ticket', request)
     return response.data
+  } catch (error) {
+    throw handleAPIError(error);
+  }
+}
+export const editConversionTicket = async (request: EditTicketRequestSchema): Promise<APISuccessResp> => {
+  try {
+    if (request.application_id.length != 0) {
+        const response = await axiosInstance.patch<APISuccessResp>('/api/edit-ticket', request)
+        return response.data
+    } else {
+      throw new APiErrorResp('Application id cannot be empty', new Date().toUTCString())
+    }
   } catch (error) {
     throw handleAPIError(error);
   }

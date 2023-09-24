@@ -5,10 +5,15 @@ import { useMutation } from "@tanstack/react-query";
 import {
   APiErrorResp,
   DeleteTicketSchema,
+  EditTicketRequestSchema,
   EditTicketValidation,
   SearchFormSchema,
 } from "@/layouts/ComponentsStyle";
-import { deleteTicket, searchFromTable } from "@/query-hooks/query-hook";
+import {
+  deleteTicket,
+  editConversionTicket,
+  searchFromTable,
+} from "@/query-hooks/query-hook";
 import { useRouter } from "next/navigation";
 import { useDisclosure } from "@mantine/hooks";
 import { Box, Modal, Text, TextInput, NumberInput, Grid } from "@mantine/core";
@@ -18,6 +23,7 @@ import { useToast } from "@/components/ui/use-toast";
 import CustomOverlay from "@/components/CustomOverlay";
 import { useForm, yupResolver } from "@mantine/form";
 import { FaCalendarDays } from "react-icons/fa6";
+import dayjs from 'dayjs';
 export default function SearchTicker() {
   const router = useRouter();
   const { toast } = useToast();
@@ -46,9 +52,28 @@ export default function SearchTicker() {
     mutationFn: (request: SearchFormSchema) => searchFromTable(request),
     cacheTime: 0,
   });
+  const editMutation = useMutation({
+    mutationKey: ["editTicket"],
+    mutationFn: (request: EditTicketRequestSchema) =>
+      editConversionTicket(request),
+    onSuccess(data, variables, context) {
+      toast({
+        title: "Success",
+        description: data.message,
+        variant: "default",
+      });
+    },
+    onError: (error) => {
+      toast({
+        title: "Error",
+        description: error instanceof APiErrorResp ? error.userMsg : "",
+        variant: "destructive",
+      });
+    },
+  });
   const [opened, { toggle, close }] = useDisclosure(false);
-  const [openCalendar, toggleCalendar] = useState<boolean>(false);
   const editModalhandler = useDisclosure(false);
+  const [toEditObj, setEditObj] = useState<string>("");
   const [toDeleteObj, setDeleteObj] = useState<
     DeleteTicketSchema | undefined
   >();
@@ -82,7 +107,11 @@ export default function SearchTicker() {
     <main className="container max-w-screen-lg mx-auto lg: ml-60">
       {
         <CustomOverlay
-          isVisible={searchMutation.isLoading || deleteMutation.isLoading}
+          isVisible={
+            searchMutation.isLoading ||
+            deleteMutation.isLoading ||
+            editMutation.isLoading
+          }
         />
       }
       <div className="px-4 p-4">
@@ -218,6 +247,7 @@ export default function SearchTicker() {
                         });
                         toggle();
                       } else if (action === "edit") {
+                        setEditObj(id);
                         editModalhandler[1].toggle();
                       }
                     }}
@@ -270,7 +300,21 @@ export default function SearchTicker() {
             >
               <Box>
                 <form
-                  onSubmit={editForm.onSubmit((values) => console.log(values))}
+                  onSubmit={editForm.onSubmit((values) => {
+                    editModalhandler[1].close();
+                    const requestBody: EditTicketRequestSchema = {
+                      application_id: toEditObj,
+                      conversion_case_no: values.conversion_case_no,
+                      conversion_transaction_amount:
+                        values.conversion_transaction_amount.toString(),
+                      conversion_transaction_date:
+                        dayjs(values.conversion_transaction_date).format("DD-MM-YYYY"),
+                      conversion_transaction_id:
+                        values.conversion_transaction_id,
+                    };
+                    console.log(requestBody);
+                    editMutation.mutate(requestBody);
+                  })}
                 >
                   <Grid>
                     <Grid.Col span={6}>
@@ -311,12 +355,15 @@ export default function SearchTicker() {
                       />
                     </Grid.Col>
                   </Grid>
+                  <Box className="mt-3 p-2">
+                    <button
+                      type="submit"
+                      className="mr-2 font-bold py-2 px-4 rounded bg-blue-500 hover:bg-blue-700 text-white"
+                    >
+                      Submit
+                    </button>
+                  </Box>
                 </form>
-              </Box>
-              <Box className="mt-3 p-2" >
-                <button className="mr-2 font-bold py-2 px-4 rounded bg-blue-500 hover:bg-blue-700 text-white">
-                  Submit
-                </button>
               </Box>
             </Modal>
           </div>
