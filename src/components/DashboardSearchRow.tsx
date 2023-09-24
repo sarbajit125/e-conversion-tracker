@@ -39,9 +39,7 @@ function DashboardSearchRow(props: DashboardSearchRowProps) {
       <td className="p-3 text-sm font-medium text-gray-900 truncate text-center">
         {props.applicationId}
       </td>
-      <td className="p-3 text-center">
-        {createBadge()}
-      </td>
+      <td className="p-3 text-center">{createBadge()}</td>
       <td className="p-3 ">
         <div className="flex justify-center">
           <div
@@ -52,14 +50,16 @@ function DashboardSearchRow(props: DashboardSearchRowProps) {
           >
             <MdOutlineRemoveRedEye size={25} />
           </div>
-          <div
-            className="text-gray-400 hover:text-gray-200 mx-2"
-            onClick={(e) =>
-              props.actionCallback(props.id, props.category, "edit")
-            }
-          >
-            <MdModeEditOutline size={25} />
-          </div>
+          {props.status == "Initiated" ? (
+            <div
+              className="text-gray-400 hover:text-gray-200 mx-2"
+              onClick={(e) =>
+                props.actionCallback(props.id, props.category, "edit")
+              }
+            >
+              <MdModeEditOutline size={25} />
+            </div>
+          ) : null}
           <div
             className="text-gray-400 hover:text-gray-200 ml-2"
             onClick={(e) =>

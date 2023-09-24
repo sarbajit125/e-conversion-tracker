@@ -82,3 +82,16 @@ export interface SearchTableResp {
   category: string,
   status: string
 }
+export interface EditTicketFormSchema {
+  conversion_case_no: string;
+  conversion_transaction_id: string;
+  conversion_transaction_amount: string;
+  conversion_transaction_date: string;
+}
+export const EditTicketValidation: Yup.Schema<EditTicketFormSchema> = Yup.object().shape({
+  application_fees_amount: Yup.string().required("Mandatory field"),
+  conversion_case_no: Yup.string().required("Mandatory field"),
+  conversion_transaction_id: Yup.string().required("Mandatory field"),
+  conversion_transaction_amount: Yup.string().required("Mandatory field"),
+  conversion_transaction_date: Yup.string().required("Mandatory field"),
+})

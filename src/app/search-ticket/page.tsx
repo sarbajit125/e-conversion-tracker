@@ -5,16 +5,19 @@ import { useMutation } from "@tanstack/react-query";
 import {
   APiErrorResp,
   DeleteTicketSchema,
+  EditTicketValidation,
   SearchFormSchema,
 } from "@/layouts/ComponentsStyle";
 import { deleteTicket, searchFromTable } from "@/query-hooks/query-hook";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useDisclosure } from "@mantine/hooks";
-import { Modal, Text, Button, Group, LoadingOverlay } from "@mantine/core";
+import { Box, Modal, Text, TextInput, NumberInput } from "@mantine/core";
+import { DateInput } from "@mantine/dates";
 import { useState } from "react";
 import { useToast } from "@/components/ui/use-toast";
 import CustomOverlay from "@/components/CustomOverlay";
-
+import { useForm, yupResolver } from "@mantine/form";
+import { FaCalendarDays } from "react-icons/fa6";
 export default function SearchTicker() {
   const router = useRouter();
   const { toast } = useToast();
@@ -22,7 +25,7 @@ export default function SearchTicker() {
     mutationKey: ["deleteTicket"],
     mutationFn: (request: DeleteTicketSchema) => deleteTicket(request),
     onError: (error) => {
-      close()
+      close();
       toast({
         title: "Error",
         description: error instanceof APiErrorResp ? error.userMsg : "",
@@ -30,7 +33,7 @@ export default function SearchTicker() {
       });
     },
     onSuccess(data, variables, context) {
-      close()
+      close();
       toast({
         title: "Success",
         description: data.message,
@@ -44,6 +47,8 @@ export default function SearchTicker() {
     cacheTime: 0,
   });
   const [opened, { toggle, close }] = useDisclosure(false);
+  const [openCalendar, toggleCalendar] = useState<boolean>(false);
+  const editModalhandler = useDisclosure(false);
   const [toDeleteObj, setDeleteObj] = useState<
     DeleteTicketSchema | undefined
   >();
@@ -62,10 +67,24 @@ export default function SearchTicker() {
       searchMutation.mutate(createRequst);
     },
   });
+  const editForm = useForm({
+    initialValues: {
+      conversion_case_no: "",
+      conversion_transaction_id: "",
+      conversion_transaction_amount: "",
+      conversion_transaction_date: "",
+    },
+    validateInputOnBlur: true,
+    validate: yupResolver(EditTicketValidation),
+  });
 
   return (
     <main className="container max-w-screen-lg mx-auto lg: ml-60">
-      {<CustomOverlay isVisible={searchMutation.isLoading || deleteMutation.isLoading} />}
+      {
+        <CustomOverlay
+          isVisible={searchMutation.isLoading || deleteMutation.isLoading}
+        />
+      }
       <div className="px-4 p-4">
         <h2 className="font-semibold text-xl text-gray-600">Search Ticket</h2>
         <p className="text-gray-500 mb-6">
@@ -193,8 +212,13 @@ export default function SearchTicker() {
                         params.set("id", id);
                         router.push(`${"/view-ticket?" + params.toString()}`);
                       } else if (action === "delete") {
-                        setDeleteObj({ application_id: id, category: type.toLowerCase() });
+                        setDeleteObj({
+                          application_id: id,
+                          category: type.toLowerCase(),
+                        });
                         toggle();
+                      } else if (action === "edit") {
+                        editModalhandler[1].toggle();
                       }
                     }}
                   />
@@ -221,9 +245,8 @@ export default function SearchTicker() {
                   onClick={() => {
                     deleteMutation.mutate(
                       toDeleteObj ?? { application_id: "", category: "" }
-                    )
-                  }
-                  }
+                    );
+                  }}
                 >
                   Delete
                 </button>
@@ -235,6 +258,52 @@ export default function SearchTicker() {
                   Cancel
                 </button>
               </div>
+            </Modal>
+            <Modal
+              opened={editModalhandler[0]}
+              size="lg"
+              radius="md"
+              onClose={editModalhandler[1].close}
+              withCloseButton={true}
+              title={"Conversion payment details"}
+              centered
+            >
+              <Box>
+                <form
+                  onSubmit={editForm.onSubmit((values) => console.log(values))}
+                >
+                  <TextInput
+                    label={"Conversion Case No"}
+                    withAsterisk
+                    {...editForm.getInputProps("conversion_case_no")}
+                  />
+                  <DateInput
+                    label={"Deposit Date"}
+                    {...editForm.getInputProps("conversion_transaction_date")}
+                    rightSection={<FaCalendarDays />}
+                    maxDate={new Date()}
+                    valueFormat="DD-MM-YYYY"
+                  />
+                  <TextInput
+                    label={"Conversion Transaction Id"}
+                    withAsterisk
+                    {...editForm.getInputProps("conversion_transaction_id")}
+                  />
+                  <NumberInput
+                    label={"Conversion Amount Deposited"}
+                    min={0}
+                    thousandsSeparator=","
+                    precision={2}
+                    prefix="$"
+                    {...editForm.getInputProps("conversion_transaction_amount")}
+                  />
+                </form>
+              </Box>
+              <Box>
+                <button className="mr-2 font-bold py-2 px-4 rounded bg-blue-500 hover:bg-blue-700 text-white">
+                  Submit
+                </button>
+              </Box>
             </Modal>
           </div>
         ) : null}
