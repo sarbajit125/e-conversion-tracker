@@ -11,7 +11,7 @@ import {
 import { deleteTicket, searchFromTable } from "@/query-hooks/query-hook";
 import { useRouter } from "next/navigation";
 import { useDisclosure } from "@mantine/hooks";
-import { Box, Modal, Text, TextInput, NumberInput } from "@mantine/core";
+import { Box, Modal, Text, TextInput, NumberInput, Grid } from "@mantine/core";
 import { DateInput } from "@mantine/dates";
 import { useState } from "react";
 import { useToast } from "@/components/ui/use-toast";
@@ -272,34 +272,48 @@ export default function SearchTicker() {
                 <form
                   onSubmit={editForm.onSubmit((values) => console.log(values))}
                 >
-                  <TextInput
-                    label={"Conversion Case No"}
-                    withAsterisk
-                    {...editForm.getInputProps("conversion_case_no")}
-                  />
-                  <DateInput
-                    label={"Deposit Date"}
-                    {...editForm.getInputProps("conversion_transaction_date")}
-                    rightSection={<FaCalendarDays />}
-                    maxDate={new Date()}
-                    valueFormat="DD-MM-YYYY"
-                  />
-                  <TextInput
-                    label={"Conversion Transaction Id"}
-                    withAsterisk
-                    {...editForm.getInputProps("conversion_transaction_id")}
-                  />
-                  <NumberInput
-                    label={"Conversion Amount Deposited"}
-                    min={0}
-                    thousandsSeparator=","
-                    precision={2}
-                    prefix="$"
-                    {...editForm.getInputProps("conversion_transaction_amount")}
-                  />
+                  <Grid>
+                    <Grid.Col span={6}>
+                      <TextInput
+                        label={"Conversion Case No"}
+                        withAsterisk
+                        {...editForm.getInputProps("conversion_case_no")}
+                      />
+                    </Grid.Col>
+                    <Grid.Col span={6}>
+                      <DateInput
+                        label={"Deposit Date"}
+                        {...editForm.getInputProps(
+                          "conversion_transaction_date"
+                        )}
+                        rightSection={<FaCalendarDays />}
+                        maxDate={new Date()}
+                        valueFormat="DD-MM-YYYY"
+                      />
+                    </Grid.Col>
+                    <Grid.Col span={6}>
+                      <TextInput
+                        label={"Conversion Transaction Id"}
+                        withAsterisk
+                        {...editForm.getInputProps("conversion_transaction_id")}
+                      />
+                    </Grid.Col>
+                    <Grid.Col span={6}>
+                      <NumberInput
+                        label={"Conversion Amount Deposited"}
+                        min={0}
+                        thousandsSeparator=","
+                        precision={2}
+                        prefix="$"
+                        {...editForm.getInputProps(
+                          "conversion_transaction_amount"
+                        )}
+                      />
+                    </Grid.Col>
+                  </Grid>
                 </form>
               </Box>
-              <Box>
+              <Box className="mt-3 p-2" >
                 <button className="mr-2 font-bold py-2 px-4 rounded bg-blue-500 hover:bg-blue-700 text-white">
                   Submit
                 </button>
