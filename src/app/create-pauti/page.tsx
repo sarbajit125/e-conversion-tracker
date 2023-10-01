@@ -7,7 +7,6 @@ import {
   TextInput,
   Select,
 } from "@mantine/core";
-import { pdfjs } from "react-pdf";
 import { DateInput, TimeInput } from "@mantine/dates";
 import { useForm, yupResolver } from "@mantine/form";
 import {
@@ -20,7 +19,7 @@ import CustomOverlay from "@/components/CustomOverlay";
 import { useMutation } from "@tanstack/react-query";
 import { addSaleDeedSlot } from "@/query-hooks/query-hook";
 import { useToast } from "@/components/ui/use-toast";
-pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
+import { createWorker } from "tesseract.js";
 function CreateSlot() {
   const [documentType, setDocumentType] = useState<string>("pauti");
   const { toast } = useToast();
@@ -77,17 +76,15 @@ function CreateSlot() {
   };
   const handleReadPdfText = async (uploadedFile: File) => {
     try {
-      const fileArrayBuffer = await uploadedFile.arrayBuffer();
-      const typedArray = new Uint8Array(fileArrayBuffer);
-      const pdf = await pdfjs.getDocument(typedArray).promise;
-      const pageTextPromises = Array.from({ length: 1 }, (_, i) =>
-        pdf.getPage(i + 1).then((page) => page.getTextContent())
-      );
-      const pageTexts = await Promise.all(pageTextPromises);
-      console.log(pageTexts);
-      const extractedTextStr: string[] = pageTexts[0].items.map((item) =>
-        "str" in item ? item.str : ""
-      );
+      const worker = await createWorker('eng', 1, {
+        logger: m => console.log(m), // Add logger here
+      });
+      await worker.load();
+      const {
+        data: { text },
+      } = await worker.recognize(uploadedFile);
+      console.log(text)
+      const extractedTextStr: string[] = text.split('\n')
       if (documentType === "slotBooking") {
         fillDetailsForSlot(extractedTextStr);
       } else {
@@ -99,6 +96,26 @@ function CreateSlot() {
   };
   const fillDetailsForSlot = (textArr: string[]) => {
     console.log(textArr);
+    const firstPartyIdx = textArr.findIndex((item) => item.includes('First Party Name'))
+    const firstPartyStr = textArr[firstPartyIdx].slice(textArr[firstPartyIdx].indexOf(':') + 1)
+    const secondPartyIdx = textArr.findIndex((item) => item.includes('Second Party Name'))
+    const secondPartStr = textArr[secondPartyIdx].slice(textArr[secondPartyIdx].indexOf(':') + 1)
+    const applicationIdIdx = textArr.findIndex((item) => item.includes('Slot Appointment Reference No.'))
+    const applicationIdtStr = textArr[applicationIdIdx].slice(textArr[applicationIdIdx].indexOf(':') + 1)
+    const datedx = textArr.findIndex((item) => item.includes('Slot Appointment Date'))
+    const dateStr = textArr[datedx].slice(textArr[datedx].indexOf(':') + 1)
+    const districtIdx = textArr.findIndex((item) => item.includes('DISTRICT'))
+    const districtArr = textArr[districtIdx].split(' ')
+    const firstColorIdx = districtArr.findIndex((item) => item === ':')
+    const lastColonIdx = districtArr.findLastIndex((item) => item === ':')
+    const districtStr = districtArr[firstColorIdx + 1]
+    const regOffice = districtArr[lastColonIdx + 1]
+    console.log(firstPartyStr)
+    console.log(secondPartStr)
+    console.log(applicationIdtStr)
+    console.log(dateStr)
+    console.log(districtStr)
+    console.log(regOffice)
   };
   const fillDetailsForPauti = (textArr: string[]) => {
     console.log(textArr);
@@ -142,7 +159,7 @@ function CreateSlot() {
                 <FileInput
                   label="Upload document"
                   placeholder="tap to upload document"
-                  accept=".pdf"
+                  accept="image/png,image/jpeg"
                   onChange={(e) => handleFileChange(e)}
                 />
               </div>
