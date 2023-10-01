@@ -14,6 +14,7 @@ model Users {
   id String @id @default(uuid())
   name String @unique
   conversions Conversion_Table[]
+  saleDeeds  SlotBooking_Table[]
 }
 
 model Conversion_Table {
@@ -36,4 +37,14 @@ model Transaction_Record_Table {
   conversion_id String
   transaction_type String
   conversion_details Conversion_Table @relation(fields: [conversion_id],references: [application_id], onDelete: Cascade)
+}
+
+model SlotBooking_Table {
+  firstParty String
+  firstParty_Id Users @relation(fields: [firstParty], references: [name])
+  secondParty String
+  district String
+  officeName String
+  slotDate DateTime
+  application_id String @id
 }
