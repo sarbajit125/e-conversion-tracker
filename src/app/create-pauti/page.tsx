@@ -95,28 +95,54 @@ function CreateSlot() {
     }
   };
   const fillDetailsForSlot = (textArr: string[]) => {
-    console.log(textArr);
-    const firstPartyIdx = textArr.findIndex((item) => item.includes('First Party Name'))
-    const firstPartyStr = textArr[firstPartyIdx].slice(textArr[firstPartyIdx].indexOf(':') + 1)
-    const secondPartyIdx = textArr.findIndex((item) => item.includes('Second Party Name'))
-    const secondPartStr = textArr[secondPartyIdx].slice(textArr[secondPartyIdx].indexOf(':') + 1)
-    const applicationIdIdx = textArr.findIndex((item) => item.includes('Slot Appointment Reference No.'))
-    const applicationIdtStr = textArr[applicationIdIdx].slice(textArr[applicationIdIdx].indexOf(':') + 1)
-    const datedx = textArr.findIndex((item) => item.includes('Slot Appointment Date'))
-    const dateStr = textArr[datedx].slice(textArr[datedx].indexOf(':') + 1)
-    const districtIdx = textArr.findIndex((item) => item.includes('DISTRICT'))
-    const districtArr = textArr[districtIdx].split(' ')
-    const firstColorIdx = districtArr.findIndex((item) => item === ':')
-    const lastColonIdx = districtArr.findLastIndex((item) => item === ':')
-    const districtStr = districtArr[firstColorIdx + 1]
-    const regOffice = districtArr[lastColonIdx + 1]
-    console.log(firstPartyStr)
-    console.log(secondPartStr)
-    console.log(applicationIdtStr)
-    console.log(dateStr)
-    console.log(districtStr)
-    console.log(regOffice)
+    const firstPartyName = findValueByLabel(textArr, 'First Party Name');
+    const secondPartyName = findValueByLabel(textArr, 'Second Party Name');
+    const applicationId = findValueByLabel(textArr, 'Slot Appointment Reference No.');
+    const slotDate = findValueByLabel(textArr, 'Slot Appointment Date');
+    const districtLine = textArr.find((item) => item.includes('DISTRICT'));
+  
+    if (firstPartyName) {
+      console.log('First Party Name:', firstPartyName);
+      slotForm.setFieldValue("firstParty", firstPartyName)
+    }
+    if (secondPartyName) {
+      console.log('Second Party Name:', secondPartyName);
+      slotForm.setFieldValue('secondParty', secondPartyName)
+    }
+    if (applicationId) {
+      console.log('Slot Appointment Reference No.:', applicationId);
+      slotForm.setFieldValue('application_id', applicationId)
+    }
+    if (slotDate) {
+      console.log('Slot Appointment Date:', slotDate);
+      // slotForm.setFieldValue('slotDate', slotDate)
+    }
+    if (districtLine) {
+      const { district, regOffice } = parseDistrict(districtLine);
+      console.log('District:', district);
+      console.log('Registration Office:', regOffice);
+      slotForm.setFieldValue('district', district)
+      slotForm.setFieldValue('officeName', regOffice)
+    }
   };
+  const findValueByLabel = (textArr: string[], label: string): string | undefined => {
+    const index = textArr.findIndex((item) => item.includes(label));
+    if (index !== -1) {
+      const item = textArr[index];
+      const value = item.slice(item.indexOf(':') + 1).trim();
+      return value;
+    }
+    return undefined;
+  };
+  const parseDistrict = (districtLine: string): { district: string; regOffice: string } => {
+    const districtArr = districtLine.split(' ');
+    const firstColonIdx = districtArr.indexOf(':');
+    const lastColonIdx = districtArr.lastIndexOf(':');
+    const district = districtArr[firstColonIdx + 1].trim();
+    const regOffice = districtArr[lastColonIdx + 1].trim();
+    return { district, regOffice };
+  };
+
   const fillDetailsForPauti = (textArr: string[]) => {
     console.log(textArr);
   };
