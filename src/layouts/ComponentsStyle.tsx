@@ -109,3 +109,44 @@ export const EditTicketRequestValidation: Yup.Schema<EditTicketRequestSchema> = 
   conversion_transaction_date: Yup.string().required("Mandatory field"),
   application_id: Yup.string().required("Mandatory field"),
 })
+
+export interface SlotTicketFormSchema {
+  firstParty: string;
+  secondParty: string;
+  district: string;
+  officeName: string;
+  slotDate: Date;
+  time: string;
+  application_id: string;
+}
+export const SlotTicktFormValidation: Yup.Schema<SlotTicketFormSchema> = Yup.object().shape({
+  firstParty: Yup.string().required("Mandatory field"),
+  secondParty: Yup.string().required("Mandatory field"),
+  district: Yup.string().required("Mandatory field"),
+  officeName: Yup.string().required("Mandatory field"),
+  time: Yup.string().required("Mandatory field"),
+  application_id: Yup.string().required("Mandatory field"),
+  slotDate: Yup.date().required("Mandatory field"),
+})
+
+export interface EPautiFormSchema {
+  applicant_name: string;
+  applicant_id: string;
+  tahsil: string;
+  mouza: string;
+  khata: string;
+  transaction_date: Date;
+  financial_year: string;
+  transaction_amount: Number;
+}
+
+export const EPautiFormValidation: Yup.Schema<EPautiFormSchema> = Yup.object().shape({
+  applicant_name: Yup.string().required("Mandatory field"),
+  applicant_id: Yup.string().required("Mandatory field"),
+  tahsil: Yup.string().required("Mandatory field"),
+  mouza: Yup.string().required("Mandatory field"),
+  khata: Yup.string().required("Mandatory field"),
+  financial_year: Yup.string().required("Mandatory field"),
+  transaction_date: Yup.date().required("Mandatory field"),
+  transaction_amount: Yup.number().required("Mandatory field").min(0 , "amount cannot be less than zero")
+})

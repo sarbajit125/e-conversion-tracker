@@ -6,12 +6,46 @@ import {
   Radio,
   TextInput,
   Select,
+  Group,
+  Button,
 } from "@mantine/core";
 import { pdfjs } from "react-pdf";
 import { DateInput, TimeInput } from "@mantine/dates";
+import { useForm, yupResolver } from "@mantine/form";
+import {
+  EPautiFormValidation,
+  SlotTicktFormValidation,
+} from "@/layouts/ComponentsStyle";
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 function CreateSlot() {
   const [documentType, setDocumentType] = useState<string>("pauti");
+  const slotForm = useForm({
+    initialValues: {
+      firstParty: "",
+      secondParty: "",
+      district: "",
+      officeName: "",
+      slotDate: "",
+      time: "",
+      application_id: "",
+    },
+    validateInputOnBlur: true,
+    validate: yupResolver(SlotTicktFormValidation),
+  });
+  const pautiForm = useForm({
+    initialValues: {
+      applicant_name: "",
+      applicant_id: "",
+      tahsil: "",
+      mouza: "",
+      khata: "",
+      transaction_date: "",
+      financial_year: "",
+      transaction_amount: 0,
+    },
+    validateInputOnBlur: true,
+    validate: yupResolver(EPautiFormValidation),
+  });
   const handleFileChange = (file: File | null) => {
     if (file != null) {
       handleReadPdfText(file);
@@ -26,7 +60,7 @@ function CreateSlot() {
         pdf.getPage(i + 1).then((page) => page.getTextContent())
       );
       const pageTexts = await Promise.all(pageTextPromises);
-       console.log(pageTexts);
+      console.log(pageTexts);
       const extractedTextStr: string[] = pageTexts[0].items.map((item) =>
         "str" in item ? item.str : ""
       );
@@ -40,10 +74,10 @@ function CreateSlot() {
     }
   };
   const fillDetailsForSlot = (textArr: string[]) => {
-    console.log(textArr)
+    console.log(textArr);
   };
   const fillDetailsForPauti = (textArr: string[]) => {
-    console.log(textArr)
+    console.log(textArr);
   };
   return (
     <main className="container max-w-screen-lg mx-auto lg: ml-60">
@@ -71,12 +105,7 @@ function CreateSlot() {
                   label="Select your document type"
                   withAsterisk
                 >
-                  <Radio
-                    value="pauti"
-                    label="Pauti"
-                    className="p-3"
-                    checked
-                  />
+                  <Radio value="pauti" label="Pauti" className="p-3" checked />
                   <Radio
                     value="slotBooking"
                     className="p-3"
@@ -97,7 +126,7 @@ function CreateSlot() {
         </div>
       </div>
       {documentType == "slotBooking" ? (
-        <form>
+        <form onSubmit={slotForm.onSubmit((values) => console.log(values))}>
           <div className="bg-white rounded shadow-lg p-4 px-4 md:p-8 mb-6">
             <div className="grid gap-4 gap-y-2 text-sm grid-cols-1 lg:grid-cols-3">
               <div className="text-gray-600">
@@ -110,24 +139,28 @@ function CreateSlot() {
                     <TextInput
                       label="First party"
                       placeholder="Enter first party name"
+                      {...slotForm.getInputProps("firstParty")}
                     />
                   </div>
                   <div className="md:col-span-5">
                     <TextInput
                       label="Second party"
                       placeholder="Enter second party name"
+                      {...slotForm.getInputProps("secondParty")}
                     />
                   </div>
                   <div className="md:col-span-3">
                     <TextInput
                       label="District"
                       placeholder="Enter district name"
+                      {...slotForm.getInputProps("district")}
                     />
                   </div>
                   <div className="md:col-span-2">
                     <TextInput
                       label="Registration Office"
                       placeholder="Enter office name"
+                      {...slotForm.getInputProps("officeName")}
                     />
                   </div>
                   <div className="md:col-span-2">
@@ -135,16 +168,31 @@ function CreateSlot() {
                       valueFormat="DD/MM/YYYY"
                       label="Slot date"
                       placeholder="Enter slot appointment date here"
+                      {...slotForm.getInputProps("slotDate")}
                     />
                   </div>
                   <div className="md:col-span-2">
-                    <TimeInput label="Appointment time slot" />
+                    <TimeInput
+                      label="Appointment time slot"
+                      {...slotForm.getInputProps("time")}
+                    />
                   </div>
                   <div className="md:col-span-5">
                     <TextInput
                       label="Application Id"
                       placeholder="Enter Slot appointment reference number"
+                      {...slotForm.getInputProps("application_id")}
                     />
+                  </div>
+                </div>
+                <div className="md:col-span-5 text-right mt-3">
+                  <div className="inline-flex items-end">
+                    <button
+                      type="submit"
+                      className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                    >
+                      Submit
+                    </button>
                   </div>
                 </div>
               </div>
@@ -152,7 +200,7 @@ function CreateSlot() {
           </div>
         </form>
       ) : (
-        <form>
+        <form onSubmit={pautiForm.onSubmit((values) => console.log(values))}>
           <div className="bg-white rounded shadow-lg p-4 px-4 md:p-8 mb-6">
             <div className="grid gap-4 gap-y-2 text-sm grid-cols-1 lg:grid-cols-3">
               <div className="text-gray-600">
@@ -165,28 +213,43 @@ function CreateSlot() {
                     <TextInput
                       label="Applicant name"
                       placeholder="Enter khata owner name"
+                      {...pautiForm.getInputProps("applicant_name")}
                     />
                   </div>
                   <div className="md:col-span-5">
                     <TextInput
                       label="Reference Id"
                       placeholder="Enter Receipt number"
+                      {...pautiForm.getInputProps("applicant_id")}
                     />
                   </div>
                   <div className="md:col-span-2">
-                    <TextInput label="Tahsil" placeholder="Enter tahsil name" />
+                    <TextInput
+                      label="Tahsil"
+                      placeholder="Enter tahsil name"
+                      {...pautiForm.getInputProps("tahsil")}
+                    />
                   </div>
                   <div className="md:col-span-2">
-                    <TextInput label="Mouza" placeholder="Enter mouza name" />
+                    <TextInput
+                      label="Mouza"
+                      placeholder="Enter mouza name"
+                      {...pautiForm.getInputProps("mouza")}
+                    />
                   </div>
                   <div className="md:col-span-1">
-                    <TextInput label="Khata" placeholder="Enter khata number" />
+                    <TextInput
+                      label="Khata"
+                      placeholder="Enter khata number"
+                      {...pautiForm.getInputProps("khata")}
+                    />
                   </div>
                   <div className="md:col-span-2">
                     <DateInput
                       valueFormat="DD/MM/YYYY"
                       label="Transaction date"
                       placeholder="Enter slot transaction date here"
+                      {...pautiForm.getInputProps("transaction_date")}
                     />
                   </div>
                   <div className="md:col-span-1">
@@ -194,6 +257,7 @@ function CreateSlot() {
                       label="Financial year"
                       placeholder="Enter year for which pauti deposited"
                       data={["2023-24", "2022-23", "2021-22"]}
+                      {...pautiForm.getInputProps("financial_year")}
                     />
                   </div>
                   <div className="md:col-span-2">
@@ -203,7 +267,18 @@ function CreateSlot() {
                       thousandsSeparator=","
                       precision={2}
                       prefix="$"
+                      {...pautiForm.getInputProps("transaction_amount")}
                     />
+                  </div>
+                </div>
+                <div className="md:col-span-5 text-right mt-3">
+                  <div className="inline-flex items-end">
+                    <button
+                      type="submit"
+                      className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                    >
+                      Submit
+                    </button>
                   </div>
                 </div>
               </div>
