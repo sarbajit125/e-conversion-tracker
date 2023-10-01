@@ -8,6 +8,7 @@ import {
   PDFFormSchema,
   SearchFormSchema,
   SearchTableResp,
+  SlotTicketFormSchema,
 } from "@/layouts/ComponentsStyle";
 import axiosInstance from "@/networking/axiosInstance";
 import { AxiosError } from "axios";
@@ -104,6 +105,15 @@ export const editConversionTicket = async (request: EditTicketRequestSchema): Pr
     } else {
       throw new APiErrorResp('Application id cannot be empty', new Date().toUTCString())
     }
+  } catch (error) {
+    throw handleAPIError(error);
+  }
+}
+
+export const addSaleDeedSlot =async (request:SlotTicketFormSchema) => {
+  try {
+    const response = await axiosInstance.post<APISuccessResp>('/api/create-pauti', request)
+    return response.data
   } catch (error) {
     throw handleAPIError(error);
   }

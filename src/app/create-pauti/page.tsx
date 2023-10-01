@@ -6,19 +6,43 @@ import {
   Radio,
   TextInput,
   Select,
-  Group,
-  Button,
 } from "@mantine/core";
 import { pdfjs } from "react-pdf";
 import { DateInput, TimeInput } from "@mantine/dates";
 import { useForm, yupResolver } from "@mantine/form";
 import {
+  APiErrorResp,
   EPautiFormValidation,
+  SlotTicketFormSchema,
   SlotTicktFormValidation,
 } from "@/layouts/ComponentsStyle";
+import CustomOverlay from "@/components/CustomOverlay";
+import { useMutation } from "@tanstack/react-query";
+import { addSaleDeedSlot } from "@/query-hooks/query-hook";
+import { useToast } from "@/components/ui/use-toast";
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 function CreateSlot() {
   const [documentType, setDocumentType] = useState<string>("pauti");
+  const { toast } = useToast();
+  const slotMutation = useMutation({
+    mutationKey: ['create-pauti'],
+    mutationFn: (request: SlotTicketFormSchema) => addSaleDeedSlot(request),
+    onError: (error) => {
+      toast({
+        title: "Error",
+        description: error instanceof APiErrorResp ? error.userMsg : "",
+        variant: "destructive",
+      });
+      slotForm.reset()
+    },
+    onSuccess(data, variables, context) {
+      toast({
+        title: "Success",
+        description: data.message,
+        variant: "default",
+      });
+    },
+  })
   const slotForm = useForm({
     initialValues: {
       firstParty: "",
@@ -81,6 +105,7 @@ function CreateSlot() {
   };
   return (
     <main className="container max-w-screen-lg mx-auto lg: ml-60">
+      <CustomOverlay isVisible={slotMutation.isLoading} />
       <div className="px-4 p-4">
         <h2 className="font-semibold text-xl text-gray-600">
           Registry Slot Details/Pauti Deposits
@@ -126,7 +151,18 @@ function CreateSlot() {
         </div>
       </div>
       {documentType == "slotBooking" ? (
-        <form onSubmit={slotForm.onSubmit((values) => console.log(values))}>
+        <form onSubmit={slotForm.onSubmit((values) => {
+          const createRequest: SlotTicketFormSchema = {
+            application_id: values.application_id,
+            district: values.district,
+            firstParty: values.firstParty,
+            officeName: values.officeName,
+            secondParty: values.officeName,
+            time: values.time,
+            slotDate: new Date(values.slotDate)
+          }
+          slotMutation.mutate(createRequest)
+        })}>
           <div className="bg-white rounded shadow-lg p-4 px-4 md:p-8 mb-6">
             <div className="grid gap-4 gap-y-2 text-sm grid-cols-1 lg:grid-cols-3">
               <div className="text-gray-600">
