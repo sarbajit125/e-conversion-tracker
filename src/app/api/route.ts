@@ -32,6 +32,8 @@ export async function GET(request: Request) {
     const todayDate = new Date();
     const sevenDaysBack = dayjs().subtract(7, "days").toDate();
     const fourteenDaysBack = dayjs().subtract(14, "days").toDate();
+    const lastmonthDate = dayjs().subtract(1,'month').toDate();
+    const lastTwoMothDate = dayjs().subtract(2,'month').toDate();
     const finalConverisonThisWeekData = await fetchDateOnDate(
       "CONVERSION",
       sevenDaysBack,
@@ -60,6 +62,10 @@ export async function GET(request: Request) {
       finalConverisionLastWeekData.length,
       finalConverisonThisWeekData.length
     );
+    const bookingThismonth = await fetchSlotByMonths(lastmonthDate, todayDate)
+    const bookingLastmonth = await fetchSlotByMonths(lastTwoMothDate, lastmonthDate)
+    const booking_Comp = calculateGrowth(bookingLastmonth.length, bookingThismonth.length)
+
     let finalResponse: DashboardResp = {
       recentTransaction: preparedRecentTransaction,
       recentCustomer: recentCustomerData,
@@ -75,6 +81,12 @@ export async function GET(request: Request) {
         isPostive: application_Comp[1],
         growth: application_Comp[0],
       },
+      slotRecords:{
+        key:'SLOT-BOOKING',
+        value: bookingThismonth.length,
+        isPostive: booking_Comp[1],
+        growth: booking_Comp[0],
+      }
     };
     console.log(finalResponse)
     return NextResponse.json(finalResponse, { status: 200 });
@@ -104,6 +116,7 @@ export interface DashboardResp {
   recentCustomer: RecentCustomerResp[];
   completedConversion: DashboardIndicatorsResp;
   initatedConverison: DashboardIndicatorsResp;
+  slotRecords: DashboardIndicatorsResp;
 }
 
 export interface DashboardIndicatorsResp {
@@ -149,3 +162,21 @@ const fetchDateOnDate = async (key: string, startDate: Date, endDate: Date) => {
     throw error;
   }
 };
+const fetchSlotByMonths =async (startDate: Date, endDate: Date) => {
+  try {
+    const response = await prisma.slotBooking_Table.findMany({
+      orderBy:{
+        slotDate: 'desc'
+      },
+      where:{
+        slotDate:{
+          lte: endDate,
+          gte: startDate
+        }
+      }
+    })
+    return response
+  } catch (error) {
+    throw error
+  }
+}

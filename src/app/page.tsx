@@ -118,10 +118,10 @@ export default async function Home() {
               isPositive={responseData.initatedConverison.isPostive}
             />
             <DashboardCard
-              title={"Sale-deed bookings this week"}
-              desc={5355}
-              value={32.9}
-              isPositive={true}
+              title={"Sale-deed bookings this month"}
+              desc={responseData.slotRecords.value}
+              value={responseData.slotRecords.growth}
+              isPositive={responseData.slotRecords.isPostive}
             />
             <DashboardCard
               title={"E-pauti deposits this week"}
