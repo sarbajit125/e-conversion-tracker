@@ -7,6 +7,9 @@ export async function POST(request: Request) {
     try {
         const requestBody = await request.json();
         const parsedRequest = await SlotTicktFormValidation.validate(requestBody)
+        const timeArr = parsedRequest.time.split(':').map((duration) => parseInt(duration))
+        let parsedSlot = parsedRequest.slotDate
+        parsedSlot.setUTCHours(timeArr[0],timeArr[1], 0)
         const dataFromDb = await prisma.slotBooking_Table.create({
             data:{
                 application_id: parsedRequest.application_id,
@@ -23,7 +26,7 @@ export async function POST(request: Request) {
                         }
                     }
                 },
-                slotDate: parsedRequest.slotDate
+                slotDate: parsedSlot
             }
         })
         const successResp: APISuccessResp = {

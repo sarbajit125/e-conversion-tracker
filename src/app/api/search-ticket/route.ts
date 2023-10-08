@@ -8,6 +8,35 @@ export async function POST(request: Request) {
     const requestBody = await request.json();
     const result = await SearchValidation.validate(requestBody);
     switch (result.category) {
+      case 'slot':
+        const slotfromDb = await prisma.slotBooking_Table.findMany({
+          where: {
+            OR: [
+              {
+                application_id:{
+                  equals: result.application_id
+                }
+              },
+              {
+                firstParty:{
+                  contains: result.application_id,
+                  mode:'insensitive',
+                }
+              }
+            ]
+          }
+        })
+        if (slotfromDb.length == 0) {
+          throw new APiErrorResp('No result found')
+        } else {
+          const response: SearchTableResp[] =  slotfromDb.map((item) => ({
+            id: item.application_id,
+            category: 'slot',
+            name: item.firstParty,
+            status: item.slotDate.setHours(0,0,0) > new Date().setHours(0,0,0) ? 'Pending' : 'Completed'
+        }))
+        return NextResponse.json(response, {status: 200})
+        }
       default:
       const dataFromDb = await  prisma.conversion_Table.findMany({
           where: {

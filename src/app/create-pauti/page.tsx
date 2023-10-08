@@ -115,7 +115,8 @@ function CreateSlot() {
     }
     if (slotDate) {
       console.log('Slot Appointment Date:', slotDate);
-      // slotForm.setFieldValue('slotDate', slotDate)
+      const formattedDate = new Date(slotDate)
+       slotForm.setFieldValue('slotDate', formattedDate)
     }
     if (districtLine) {
       const { district, regOffice } = parseDistrict(districtLine);
@@ -200,7 +201,7 @@ function CreateSlot() {
             district: values.district,
             firstParty: values.firstParty,
             officeName: values.officeName,
-            secondParty: values.officeName,
+            secondParty: values.secondParty,
             time: values.time,
             slotDate: new Date(values.slotDate)
           }

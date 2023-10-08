@@ -170,6 +170,7 @@ export default function SearchTicker() {
               <option value="">All Type</option>
               <option value="conversion">Conversion</option>
               <option value="pauti">Pauti</option>
+              <option value={'slot'}>Slot Booking</option>
             </select>
             <select
               name="sort"

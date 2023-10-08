@@ -73,7 +73,7 @@ export const DeleteValidation: Yup.Schema<DeleteTicketSchema> = Yup.object().sha
 
 export const SearchValidation: Yup.Schema<SearchFormSchema> = Yup.object().shape({
   application_id: Yup.string().required("Mandatory field"),
-  category: Yup.string().oneOf(['conversion', 'pauti']).required("Mandatory field"),
+  category: Yup.string().oneOf(['conversion', 'pauti', 'slot']).required("Mandatory field"),
   sort: Yup.boolean().default(true)
 })
 export interface SearchTableResp {

@@ -7,20 +7,53 @@ import {
 } from "react-icons/md";
 function DashboardSearchRow(props: DashboardSearchRowProps) {
   const createBadge = () => {
-    if (props.category.toLowerCase() == "conversion") {
-      if (props.status == "Initiated") {
+    switch (props.category.toLowerCase()) {
+      case "conversion":
+        if (props.status == "Initiated") {
+          return (
+            <span className="bg-yellow-100 text-yellow-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-yellow-900 dark:text-yellow-300">
+              {props.status}
+            </span>
+          );
+        } else {
+          return (
+            <span className="bg-green-100 text-green-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">
+              {props.status}
+            </span>
+          );
+        }
+      case "slot":
+        if (props.status == "Pending") {
+          return (
+            <span className="bg-yellow-100 text-yellow-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-yellow-900 dark:text-yellow-300">
+              {props.status}
+            </span>
+          );
+        } else {
+          return (
+            <span className="bg-yellow-100 text-yellow-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-yellow-900 dark:text-yellow-300">
+              {props.status}
+            </span>
+          );
+        }
+      default:
         return (
           <span className="bg-yellow-100 text-yellow-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-yellow-900 dark:text-yellow-300">
             {props.status}
           </span>
         );
-      } else {
-        return (
-          <span className="bg-green-100 text-green-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">
-            {props.status}
-          </span>
-        );
-      }
+    }
+  };
+  const setCategory = () => {
+    switch (props.category.toLowerCase()) {
+      case "conversion":
+        return "Conversion";
+      case "slot":
+        return "Sale Deed Booking";
+      case "pauti":
+        return "E-Pauti";
+      default:
+        return props.category.toLowerCase();
     }
   };
   return (
@@ -34,7 +67,7 @@ function DashboardSearchRow(props: DashboardSearchRowProps) {
         <span className="mx-2">{props.fullName}</span>
       </td>
       <td className="p-3 text-sm font-medium text-gray-900 truncate text-center">
-        {props.category}
+        {setCategory()}
       </td>
       <td className="p-3 text-sm font-medium text-gray-900 truncate text-center">
         {props.applicationId}
@@ -50,7 +83,7 @@ function DashboardSearchRow(props: DashboardSearchRowProps) {
           >
             <MdOutlineRemoveRedEye size={25} />
           </div>
-          {props.status == "Initiated" ? (
+          {props.status == "Initiated" || props.category != "slot" ? (
             <div
               className="text-gray-400 hover:text-gray-200 mx-2"
               onClick={(e) =>
