@@ -22,6 +22,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { createWorker } from "tesseract.js";
 function CreateSlot() {
   const [documentType, setDocumentType] = useState<string>("pauti");
+  const [ocrLoading, setOcrloading] = useState<boolean>(false);
   const { toast } = useToast();
   const slotMutation = useMutation({
     mutationKey: ['create-pauti'],
@@ -76,6 +77,7 @@ function CreateSlot() {
   };
   const handleReadPdfText = async (uploadedFile: File) => {
     try {
+      setOcrloading(true)
       const worker = await createWorker('eng', 1, {
         logger: m => console.log(m), // Add logger here
       });
@@ -91,6 +93,7 @@ function CreateSlot() {
         fillDetailsForPauti(extractedTextStr);
       }
     } catch (error) {
+      setOcrloading(false)
       console.log(error);
     }
   };
@@ -125,6 +128,7 @@ function CreateSlot() {
       slotForm.setFieldValue('district', district)
       slotForm.setFieldValue('officeName', regOffice)
     }
+    setOcrloading(false)
   };
   const findValueByLabel = (textArr: string[], label: string): string | undefined => {
     const index = textArr.findIndex((item) => item.includes(label));
@@ -149,7 +153,7 @@ function CreateSlot() {
   };
   return (
     <main className="container max-w-screen-lg mx-auto lg: ml-60">
-      <CustomOverlay isVisible={slotMutation.isLoading} />
+      <CustomOverlay isVisible={slotMutation.isLoading || ocrLoading} />
       <div className="px-4 p-4">
         <h2 className="font-semibold text-xl text-gray-600">
           Registry Slot Details/Pauti Deposits
