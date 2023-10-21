@@ -86,7 +86,8 @@ export async function GET(request: Request) {
         value: bookingThismonth.length,
         isPostive: booking_Comp[1],
         growth: booking_Comp[0],
-      }
+      },
+      chartdata: dummyChartData()
     };
     console.log(finalResponse)
     return NextResponse.json(finalResponse, { status: 200 });
@@ -117,6 +118,7 @@ export interface DashboardResp {
   completedConversion: DashboardIndicatorsResp;
   initatedConverison: DashboardIndicatorsResp;
   slotRecords: DashboardIndicatorsResp;
+  chartdata: DashboardDataGrid[]
 }
 
 export interface DashboardIndicatorsResp {
@@ -124,6 +126,11 @@ export interface DashboardIndicatorsResp {
   value: number;
   isPostive: boolean;
   growth: number;
+}
+
+export interface DashboardDataGrid {
+  month: string,
+  value: number
 }
 
 const calculateGrowth = (
@@ -179,4 +186,21 @@ const fetchSlotByMonths =async (startDate: Date, endDate: Date) => {
   } catch (error) {
     throw error
   }
+}
+
+const dummyChartData = () : DashboardDataGrid[] => {
+  return [
+    { "month": "Jan", "value": 100 },
+    { "month": "Feb", "value": 150 },
+    { "month": "Mar", "value": 200 },
+    { "month": "Apr", "value": 180 },
+    { "month": "May", "value": 220 },
+    { "month": "Jun", "value": 300 },
+    { "month": "Jul", "value": 280 },
+    { "month": "Aug", "value": 260 },
+    { "month": "Sep", "value": 240 },
+    { "month": "Oct", "value": 210 },
+    { "month": "Nov", "value": 190 },
+    { "month": "Dec", "value": 170 }
+  ]
 }

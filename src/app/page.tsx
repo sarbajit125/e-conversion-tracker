@@ -1,4 +1,5 @@
 import DashboardCard from "@/components/DashboardCard";
+import DashboardGraphs from "@/components/DashboardGraphs";
 import DashboardTransactionRow from "@/components/DashboardTransactionRow";
 import DashboardUserRow from "@/components/DashboardUserRow";
 import DownwardArrowIcon from "@/components/svgComponent/DownwardArrowIcon";
@@ -43,7 +44,7 @@ export default async function Home() {
                   )}
                 </div>
               </div>
-              <div id="main-chart" style={{ width: "518" }}></div>
+              <div id="main-chart" style={{ width: "518" }}> <DashboardGraphs data={responseData.chartdata} /></div>
             </div>
             <div>
               <div className="bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8">
