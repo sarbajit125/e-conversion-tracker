@@ -240,6 +240,7 @@ export default function SearchTicker() {
                       if (action === "view") {
                         const params = new URLSearchParams();
                         params.set("id", id);
+                        params.set('type', type)
                         router.push(`${"/view-ticket?" + params.toString()}`);
                       } else if (action === "delete") {
                         setDeleteObj({

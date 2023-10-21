@@ -33,8 +33,15 @@ function DashboardGraphs(props: DashboardChartProps) {
             data: props.data.map((item) => item.value),
             label: "Cases filled",
             fill: "start",
-            backgroundColor: "#40C0C0",
+            backgroundColor(ctx, options) {
+                const context = ctx.chart.ctx
+                const gradient = context.createLinearGradient(0,0,0,200);
+                gradient.addColorStop(0, "#40C0C0");
+                gradient.addColorStop(1, "#40C0C0");
+                return gradient;
+            },
             borderColor: "#40C0C0",
+            
           },
         ],
       }}

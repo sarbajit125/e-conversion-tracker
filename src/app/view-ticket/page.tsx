@@ -10,7 +10,8 @@ async function Page({
   searchParams: { [key: string]: string | string[] | undefined };
 }) {
   const id = searchParams["id"] as string;
-  const data = await fetchTicketData(id);
+  const type = searchParams['type'] as string
+  const data = await fetchTicketData(id, type);
   return (
     <main className="container max-w-screen-lg mx-auto lg: ml-60">
       <div className="px-4 p-4">

@@ -64,10 +64,11 @@ export const fetchDashboardData = async (): Promise<DashboardResp> => {
     throw handleAPIError(error);
   }
 };
-export const fetchTicketData = async (id: string): Promise<ViewTicketResp> => {
+export const fetchTicketData = async (id: string, type: string): Promise<ViewTicketResp> => {
   try {
     const queryParams = new URLSearchParams({
-      id: id
+      id: id,
+      type: type
     })
     const response = await fetch(`${serverURL + "/api/view-ticket?" + queryParams.toString()}`, {
       next: {revalidate: 0, tags:['ticketDetails']}
