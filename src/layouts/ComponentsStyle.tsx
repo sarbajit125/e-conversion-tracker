@@ -155,3 +155,8 @@ export interface UploadFileRequest {
   filename: string,
   file: File
 }
+
+export interface DownloadFileRequest {
+  filename: string,
+  type: string
+}

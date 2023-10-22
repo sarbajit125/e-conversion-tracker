@@ -4,6 +4,7 @@ import {
   APISuccessResp,
   APiErrorResp,
   DeleteTicketSchema,
+  DownloadFileRequest,
   EditTicketRequestSchema,
   PDFFormSchema,
   SearchFormSchema,
@@ -163,3 +164,15 @@ export const uploadSlot = async ({file, filename}: UploadFileRequest) => {
     throw handleAPIError(error);
   }
 };
+
+export const fetchImageFile =async ({type, filename}: DownloadFileRequest): Promise<Blob> => {
+  try {
+    const response = await axiosInstance.get(`/api/download-ticket`,{responseType:'blob', params:{
+      id: filename,
+      type: type,
+    }})
+    return response.data
+  } catch (error) {
+    throw handleAPIError(error);
+  }
+}

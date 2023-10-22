@@ -11,14 +11,53 @@ import {
 } from "@react-pdf/renderer";
 import { ViewTicketResp } from "@/app/api/view-ticket/route";
 import Link from "next/link";
+import { useQuery } from "@tanstack/react-query";
+import { fetchImageFile } from "@/query-hooks/query-hook";
 function ViewTicketFooter(props: PrintPDFModel) {
+  const downlodFileQuery = useQuery({
+    queryKey: ["download-ticket"],
+    queryFn: () =>
+      fetchImageFile({ type: props.type, filename: props.application_id }),
+    enabled: false,
+    onSuccess: (response) => {
+      const href = URL.createObjectURL(response);
+      // create "a" HTML element with href to file & click
+      const link = document.createElement("a");
+      link.href = href;
+      link.setAttribute("download", `${props.application_id}.png`); //or any other extension
+      document.body.appendChild(link);
+      link.click();
+
+      // clean up "a" element & remove ObjectURL
+      document.body.removeChild(link);
+      URL.revokeObjectURL(href);
+    },
+  });
   return (
     <div className="p-4 px-4 md:p-8 mb-6 flex justify-end text-white ">
-      <Link href={'search-ticket'}>
-      <button className="p-3 mr-3 bg-slate-500 rounded">Search another</button>
+      <Link href={"search-ticket"}>
+        <button className="p-3 mr-3 bg-slate-500 rounded">
+          Search another
+        </button>
       </Link>
+      {props.type === "slot" ? (
+        <button
+          className="p-3 mr-3 bg-blue-500 rounded"
+          onClick={() => {
+            downlodFileQuery.refetch();
+          }}
+        >
+          Save
+        </button>
+      ) : (
         <PDFDownloadLink
-          document={<PDF_REPORT_Document records={props.records} application_id={props.application_id} />}
+          document={
+            <PDF_REPORT_Document
+              records={props.records}
+              application_id={props.application_id}
+              type={props.type}
+            />
+          }
           fileName={"PDF_REPORT.pdf"}
           className="p-3 mr-3 bg-blue-500 rounded"
         >
@@ -26,6 +65,7 @@ function ViewTicketFooter(props: PrintPDFModel) {
             loading ? "Report loading..." : "Print"
           }
         </PDFDownloadLink>
+      )}
     </div>
   );
 }
@@ -34,7 +74,7 @@ const PDF_REPORT_Document = (props: PrintPDFModel) => {
     page: {
       backgroundColor: "#E4E4E4",
       margin: 16,
-      marginRight:16,
+      marginRight: 16,
       width: "90%",
     },
     table: {
@@ -44,11 +84,11 @@ const PDF_REPORT_Document = (props: PrintPDFModel) => {
       flex: 1,
     },
     row: {
-      width:'100%',
+      width: "100%",
       height: 80,
       display: "flex",
       flexDirection: "row",
-      flex:1,
+      flex: 1,
     },
     pageTitle: {
       color: "red",
@@ -61,23 +101,23 @@ const PDF_REPORT_Document = (props: PrintPDFModel) => {
       fontSize: 16,
     },
     header: {
-      display: 'flex',
+      display: "flex",
       justifyContent: "center",
       alignItems: "center",
-      padding:15,
+      padding: 15,
     },
     col: {
       width: "50%",
-      height:60,
+      height: 60,
       border: 1,
       borderColor: "black",
       borderStyle: "solid",
-      padding:2,
-      marginHorizontal:2,
+      padding: 2,
+      marginHorizontal: 2,
     },
-    rowText:{
-      padding:5
-    }
+    rowText: {
+      padding: 5,
+    },
   });
 
   return (
@@ -86,7 +126,10 @@ const PDF_REPORT_Document = (props: PrintPDFModel) => {
         <View style={styles.header}>
           <Text style={styles.pageTitle}>E-Conversion Tracker </Text>
           <Text style={styles.pageSubtitle}>Ticket Details</Text>
-          <Text style={styles.pageDesc}> Ticket id: {props.application_id}</Text>
+          <Text style={styles.pageDesc}>
+            {" "}
+            Ticket id: {props.application_id}
+          </Text>
         </View>
         <View style={styles.table}>
           <View style={styles.row}>
@@ -117,6 +160,6 @@ const PDF_REPORT_Document = (props: PrintPDFModel) => {
 
 export default ViewTicketFooter;
 export interface PrintPDFModel extends ViewTicketResp {
-  application_id: string
-  
+  application_id: string;
+  type: string;
 }
