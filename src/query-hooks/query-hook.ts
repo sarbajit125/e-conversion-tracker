@@ -9,6 +9,7 @@ import {
   SearchFormSchema,
   SearchTableResp,
   SlotTicketFormSchema,
+  UploadFileRequest,
 } from "@/layouts/ComponentsStyle";
 import axiosInstance from "@/networking/axiosInstance";
 import { AxiosError } from "axios";
@@ -147,10 +148,11 @@ export const addSaleDeedSlot = async (request: SlotTicketFormSchema) => {
   }
 };
 
-export const uploadSlot = async (file: File) => {
+export const uploadSlot = async ({file, filename}: UploadFileRequest) => {
   try {
     let data = new FormData();
     data.append("file", file);
+    data.append('name', filename)
     const response = await axiosInstance.post<APISuccessResp>(
       "/api/upload-file",
       data,

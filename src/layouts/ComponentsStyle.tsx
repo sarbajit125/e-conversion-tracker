@@ -150,3 +150,8 @@ export const EPautiFormValidation: Yup.Schema<EPautiFormSchema> = Yup.object().s
   transaction_date: Yup.date().required("Mandatory field"),
   transaction_amount: Yup.number().required("Mandatory field").min(0 , "amount cannot be less than zero")
 })
+
+export interface UploadFileRequest {
+  filename: string,
+  file: File
+}

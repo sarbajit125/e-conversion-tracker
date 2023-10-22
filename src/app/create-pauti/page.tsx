@@ -14,6 +14,7 @@ import {
   EPautiFormValidation,
   SlotTicketFormSchema,
   SlotTicktFormValidation,
+  UploadFileRequest,
 } from "@/layouts/ComponentsStyle";
 import CustomOverlay from "@/components/CustomOverlay";
 import { useMutation } from "@tanstack/react-query";
@@ -40,7 +41,7 @@ function CreateSlot() {
     },
     onSuccess(data, variables, context) {
       if (uploadImg) {
-        uploadMutation.mutate(uploadImg)
+        uploadMutation.mutate({file:uploadImg, filename: variables.application_id})
       } else {
         toast({
           title: "Success",
@@ -52,7 +53,7 @@ function CreateSlot() {
   })
   const uploadMutation = useMutation({
     mutationKey: ['upload-slot'],
-    mutationFn: (request: File) => uploadSlot(request),
+    mutationFn: (request: UploadFileRequest) => uploadSlot(request),
     onError: (error) => {
       toast({
         title: "Error",
@@ -98,8 +99,8 @@ function CreateSlot() {
   });
   useEffect(() => {
     if (uploadImg) {
-      uploadMutation.mutate(uploadImg)
-     // handleReadPdfText(uploadImg);
+      //uploadMutation.mutate({file:uploadImg, filename:'1234'})
+      handleReadPdfText(uploadImg);
     }
   }, [uploadImg])
   const handleFileChange = (file: File | null) => {
