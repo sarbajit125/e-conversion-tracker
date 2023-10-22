@@ -25,7 +25,7 @@ const handleAPIError = (err: unknown) => {
   }
 };
 
-const serverURL = "http://localhost:3000"
+const serverURL = "http://localhost:3000";
 
 export const createConversionTicket = async (
   data: PDFFormSchema
@@ -64,15 +64,21 @@ export const fetchDashboardData = async (): Promise<DashboardResp> => {
     throw handleAPIError(error);
   }
 };
-export const fetchTicketData = async (id: string, type: string): Promise<ViewTicketResp> => {
+export const fetchTicketData = async (
+  id: string,
+  type: string
+): Promise<ViewTicketResp> => {
   try {
     const queryParams = new URLSearchParams({
       id: id,
-      type: type
-    })
-    const response = await fetch(`${serverURL + "/api/view-ticket?" + queryParams.toString()}`, {
-      next: {revalidate: 0, tags:['ticketDetails']}
-    })
+      type: type,
+    });
+    const response = await fetch(
+      `${serverURL + "/api/view-ticket?" + queryParams.toString()}`,
+      {
+        next: { revalidate: 0, tags: ["ticketDetails"] },
+      }
+    );
     if (!response.ok) {
       throw new APiErrorResp("Response code not matching");
     } else {
@@ -81,41 +87,77 @@ export const fetchTicketData = async (id: string, type: string): Promise<ViewTic
   } catch (error) {
     throw handleAPIError(error);
   }
-}
-export const searchFromTable = async (request: SearchFormSchema): Promise<SearchTableResp[]> => {
+};
+export const searchFromTable = async (
+  request: SearchFormSchema
+): Promise<SearchTableResp[]> => {
   try {
-    const response = await axiosInstance.post<SearchTableResp[]>("/api/search-ticket", request)
-    return response.data 
+    const response = await axiosInstance.post<SearchTableResp[]>(
+      "/api/search-ticket",
+      request
+    );
+    return response.data;
   } catch (error) {
     throw handleAPIError(error);
   }
-}
-export const deleteTicket = async (request: DeleteTicketSchema): Promise<APISuccessResp> => {
+};
+export const deleteTicket = async (
+  request: DeleteTicketSchema
+): Promise<APISuccessResp> => {
   try {
-    const response = await axiosInstance.post<APISuccessResp>('/api/delete-ticket', request)
-    return response.data
+    const response = await axiosInstance.post<APISuccessResp>(
+      "/api/delete-ticket",
+      request
+    );
+    return response.data;
   } catch (error) {
     throw handleAPIError(error);
   }
-}
-export const editConversionTicket = async (request: EditTicketRequestSchema): Promise<APISuccessResp> => {
+};
+export const editConversionTicket = async (
+  request: EditTicketRequestSchema
+): Promise<APISuccessResp> => {
   try {
     if (request.application_id.length != 0) {
-        const response = await axiosInstance.patch<APISuccessResp>('/api/edit-ticket', request)
-        return response.data
+      const response = await axiosInstance.patch<APISuccessResp>(
+        "/api/edit-ticket",
+        request
+      );
+      return response.data;
     } else {
-      throw new APiErrorResp('Application id cannot be empty', new Date().toUTCString())
+      throw new APiErrorResp(
+        "Application id cannot be empty",
+        new Date().toUTCString()
+      );
     }
   } catch (error) {
     throw handleAPIError(error);
   }
-}
+};
 
-export const addSaleDeedSlot =async (request:SlotTicketFormSchema) => {
+export const addSaleDeedSlot = async (request: SlotTicketFormSchema) => {
   try {
-    const response = await axiosInstance.post<APISuccessResp>('/api/create-pauti', request)
-    return response.data
+    const response = await axiosInstance.post<APISuccessResp>(
+      "/api/create-pauti",
+      request
+    );
+    return response.data;
   } catch (error) {
     throw handleAPIError(error);
   }
-}
+};
+
+export const uploadSlot = async (file: File) => {
+  try {
+    let data = new FormData();
+    data.append("file", file);
+    const response = await axiosInstance.post<APISuccessResp>(
+      "/api/upload-file",
+      data,
+      { headers: { "Content-Type": "application/x-www-form-urlencoded" } }
+    );
+    return response.data;
+  } catch (error) {
+    throw handleAPIError(error);
+  }
+};

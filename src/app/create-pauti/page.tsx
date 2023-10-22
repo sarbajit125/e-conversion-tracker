@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   FileInput,
   NumberInput,
@@ -17,16 +17,42 @@ import {
 } from "@/layouts/ComponentsStyle";
 import CustomOverlay from "@/components/CustomOverlay";
 import { useMutation } from "@tanstack/react-query";
-import { addSaleDeedSlot } from "@/query-hooks/query-hook";
+import { addSaleDeedSlot, uploadSlot } from "@/query-hooks/query-hook";
 import { useToast } from "@/components/ui/use-toast";
 import { createWorker } from "tesseract.js";
+import { pdfjs } from "react-pdf";
+pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 function CreateSlot() {
   const [documentType, setDocumentType] = useState<string>("pauti");
   const [ocrLoading, setOcrloading] = useState<boolean>(false);
+  const [uploadImg, setUploadFile] = useState<File | null>(null);
   const { toast } = useToast();
   const slotMutation = useMutation({
     mutationKey: ['create-pauti'],
     mutationFn: (request: SlotTicketFormSchema) => addSaleDeedSlot(request),
+    onError: (error) => {
+      toast({
+        title: "Error",
+        description: error instanceof APiErrorResp ? error.userMsg : "",
+        variant: "destructive",
+      });
+      slotForm.reset()
+    },
+    onSuccess(data, variables, context) {
+      if (uploadImg) {
+        uploadMutation.mutate(uploadImg)
+      } else {
+        toast({
+          title: "Success",
+          description: data.message,
+          variant: "default",
+        });
+      }
+    },
+  })
+  const uploadMutation = useMutation({
+    mutationKey: ['upload-slot'],
+    mutationFn: (request: File) => uploadSlot(request),
     onError: (error) => {
       toast({
         title: "Error",
@@ -70,11 +96,41 @@ function CreateSlot() {
     validateInputOnBlur: true,
     validate: yupResolver(EPautiFormValidation),
   });
+  useEffect(() => {
+    if (uploadImg) {
+      uploadMutation.mutate(uploadImg)
+     // handleReadPdfText(uploadImg);
+    }
+  }, [uploadImg])
   const handleFileChange = (file: File | null) => {
     if (file != null) {
-      handleReadPdfText(file);
+      setUploadFile(file)
     }
   };
+  const convertPDFtoImage =async (uploadedFile: File) => {
+    try {
+      const fileArrayBuffer = await uploadedFile.arrayBuffer();
+      const typedArray = new Uint8Array(fileArrayBuffer);
+      const pdf = await pdfjs.getDocument(typedArray).promise;
+      const page = await pdf.getPage(1)
+      var viewport = page.getViewport({ scale: 1.5 });
+      const canvas = document.createElement("canvas");
+    canvas.setAttribute("className", "canv");
+    canvas.height = viewport.height;
+    canvas.width = viewport.width;
+    const canvasContext = canvas.getContext("2d")
+    if (canvasContext) {
+      await page.render({
+        canvasContext:canvasContext,
+        viewport: viewport,
+      }).promise;
+      let img = canvas.toDataURL("image/png");
+      // handleReadPdfText(img)
+    }
+    } catch (error) {
+      console.log(error);
+    }
+  }
   const handleReadPdfText = async (uploadedFile: File) => {
     try {
       setOcrloading(true)
