@@ -13,19 +13,21 @@ import { Toaster } from "@/components/ui/toaster";
 import SearchIcon from "@/components/svgComponent/SearchIcon";
 import RootStyleRegistry from "@/query-hooks/emotion";
 import { IoTicketOutline } from "react-icons/io5";
+import { getLocalization } from "../../../get-localization";
 const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: "Bhulekh Conversion Tracker",
   description: "Track Land records conversion with ease",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
   params,
 }: {
   children: React.ReactNode;
   params: { lang: string }
 }) {
+  const localeDict = await getLocalization(params.lang);
   return (
     <html lang={params.lang}>
       <body className={inter.className}>
@@ -173,31 +175,31 @@ export default function RootLayout({
                           <li>
                             <RegularNavLinks
                               svg={<DashboardLogo />}
-                              path={"/"}
+                              path={`/${params.lang}`}
                               id={"dashboard"}
-                              linkName={"Dashboard"}
+                              linkName={localeDict['navigation'].dashboard_nav_text}
                             />
                           </li>
                           <li>
                             <RegularNavLinks
                               svg={<CreateTicketLogo />}
-                              path={"/create-ticket"}
+                              path={`/${params.lang}/create-ticket`}
                               id={"createTicket"}
-                              linkName={"Create Ticket"}
+                              linkName={localeDict['navigation'].createTicket_nav_text}
                             />
                           </li>
                           <li>
                             <RegularNavLinks
                               svg={<SearchIcon />}
-                              path={"/search-ticket"}
+                              path={`/${params.lang}/search-ticket`}
                               id={"searchTicket"}
-                              linkName={"Search Ticket"}
+                              linkName={localeDict['navigation'].searchTicket_nav_text}
                             />
                           </li>
                           <li>
                             <RegularNavLinks
-                              path={"/create-pauti"}
-                              linkName={"Add Slot/Pauti"}
+                              path={`/${params.lang}/create-pauti`}
+                              linkName={localeDict['navigation'].searchTicket_nav_text}
                               id="addSlot"
                               svg={<IoTicketOutline />}
                             />

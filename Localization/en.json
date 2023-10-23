@@ -8,8 +8,18 @@
         "list_latestTransaction_text":"This is a list of latest transactions",
         "viewAll_text":"View all",
         "transaction_title_text":"Transaction",
-        "date&Time_title_text":"Date & Time",
+        "dateTime_title_text":"Date & Time",
         "amount_title_text":" Amount",
-        "latestConsumer_title_Text":"Latest Customers"
+        "latestConsumer_title_Text":"Latest Customers",
+        "newApplication_title_text":"New applications this week",
+        "saleDeed_title_text":"Sale-deed bookings this month",
+        "pauti_title_text":"E-pauti deposits this week",
+        "paymentForm_title": "Payment from"
+    },
+    "navigation":{
+        "dashboard_nav_text":"Dashboard",
+        "createTicket_nav_text":"Create Ticket",
+        "searchTicket_nav_text":"Search Ticket",
+        "pauti_nav_text":"Add Slot/Pauti"
     }
   }

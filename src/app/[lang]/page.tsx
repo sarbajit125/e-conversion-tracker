@@ -87,19 +87,19 @@ export default async function Home({
                                 scope="col"
                                 className="p-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                               >
-                                Transaction
+                                {localeDict['dashboard'].transaction_title_text}
                               </th>
                               <th
                                 scope="col"
                                 className="p-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                               >
-                                Date & Time
+                                {localeDict['dashboard'].dateTime_title_text}
                               </th>
                               <th
                                 scope="col"
                                 className="p-4 text-left text-xs font-medium text-gray-500 uppercase "
                               >
-                                Amount
+                                {localeDict['dashboard'].amount_title_text}
                               </th>
                             </tr>
                           </thead>
@@ -108,8 +108,7 @@ export default async function Home({
                               (item, index) => (
                                 <DashboardTransactionRow
                                   key={index.toString()}
-                                  data={item}
-                                />
+                                  data={item} locale={lang}                                />
                               )
                             )}
                           </tbody>
@@ -123,19 +122,19 @@ export default async function Home({
           </div>
           <div className="mt-4 w-full grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
             <DashboardCard
-              title={"New applications this week"}
+              title={localeDict['dashboard'].newApplication_title_text}
               desc={responseData.initatedConverison.value}
               value={responseData.initatedConverison.growth}
               isPositive={responseData.initatedConverison.isPostive}
             />
             <DashboardCard
-              title={"Sale-deed bookings this month"}
+              title={localeDict['dashboard'].saleDeed_title_text}
               desc={responseData.slotRecords.value}
               value={responseData.slotRecords.growth}
               isPositive={responseData.slotRecords.isPostive}
             />
             <DashboardCard
-              title={"E-pauti deposits this week"}
+              title={localeDict['dashboard'].pauti_title_text}
               desc={5355}
               value={2.7}
               isPositive={false}
@@ -145,13 +144,13 @@ export default async function Home({
             <div className="bg-white shadow rounded-lg mb-4 p-4 sm:p-6 h-full">
               <div className="flex items-center justify-between mb-4">
                 <h3 className="text-xl font-bold leading-none text-gray-900">
-                  Latest Customers
+                  {localeDict["dashboard"].latestConsumer_title_Text}
                 </h3>
                 <Link
                   href="#"
                   className="text-sm font-medium text-cyan-600 hover:bg-gray-100 rounded-lg inline-flex items-center p-2"
                 >
-                  View all
+                  {localeDict["dashboard"].viewAll_text}
                 </Link>
               </div>
               <div className="flow-root">

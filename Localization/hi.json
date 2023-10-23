@@ -1,0 +1,26 @@
+{
+    "server-component": {
+      "welcome": "स्वागत है"
+    },
+    "dashboard": {
+      "completed_conversion": "इस सप्ताह पूरा हुआ परिवर्तन",
+      "latest_transaction_text": "नवीनतम लेन-देन",
+      "list_latestTransaction_text": "यह नवीनतम लेन-देन की सूची है",
+      "viewAll_text": "सभी देखें",
+      "transaction_title_text": "लेन-देन",
+      "dateTime_title_text": "तारीख और समय",
+      "amount_title_text": "राशि",
+      "latestConsumer_title_Text": "नवीनतम ग्राहक",
+      "newApplication_title_text": "इस सप्ताह नई आवेदन",
+      "saleDeed_title_text": "इस महीने बुक की गई बेच-दी की आवश्यकता",
+      "pauti_title_text": "इस सप्ताह E-पौटी जमा",
+      "paymentForm_title": "से भुगतान"
+    },
+    "navigation": {
+      "dashboard_nav_text": "डैशबोर्ड",
+      "createTicket_nav_text": "टिकट बनाएं",
+      "searchTicket_nav_text": "टिकट खोजें",
+      "pauti_nav_text": "स्लॉट/पौटी जोड़ें"
+    }
+  }
+  
