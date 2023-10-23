@@ -9,7 +9,14 @@ import {
   fetchDashboardData,
 } from "@/query-hooks/query-hook";
 import Link from "next/link";
-export default async function Home() {
+import { getLocalization } from "../../../get-localization";
+import { Locale } from '../../../i18n-config'
+export default async function Home({
+  params: { lang },
+}: {
+  params: { lang: Locale };
+}) {
+  const localeDict = await getLocalization(lang)
   const responseData = await fetchDashboardData();
   return (
     <div
@@ -26,7 +33,7 @@ export default async function Home() {
                     {responseData.completedConversion.value.toLocaleString()}
                   </span>
                   <h3 className="text-base font-normal text-gray-500">
-                    Completed conversion this week
+                    {localeDict["dashboard"].completed_conversion}
                   </h3>
                 </div>
                 <div
@@ -44,17 +51,20 @@ export default async function Home() {
                   )}
                 </div>
               </div>
-              <div id="main-chart" style={{ width: "518" }}> <DashboardGraphs data={responseData.chartdata} /></div>
+              <div id="main-chart" style={{ width: "518" }}>
+                {" "}
+                <DashboardGraphs data={responseData.chartdata} />
+              </div>
             </div>
             <div>
               <div className="bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8">
                 <div className="mb-4 flex items-center justify-between">
                   <div>
                     <h3 className="text-xl font-bold text-gray-900 mb-2">
-                      Latest Transactions
+                      {localeDict['dashboard'].latest_transaction_text}
                     </h3>
                     <span className="text-base font-normal text-gray-500">
-                      This is a list of latest transactions
+                     {localeDict['dashboard'].list_latestTransaction_text}
                     </span>
                   </div>
                   <div className="flex-shrink-0">
@@ -62,7 +72,7 @@ export default async function Home() {
                       href="#"
                       className="text-sm font-medium text-cyan-600 hover:bg-gray-100 rounded-lg p-2"
                     >
-                      View all
+                      {localeDict['dashboard'].viewAll_text}
                     </Link>
                   </div>
                 </div>

@@ -1,0 +1,15 @@
+{
+    "server-component": {
+      "welcome": "Welcome"
+    },
+    "dashboard": {
+        "completed_conversion": "Completed conversion this week",
+        "latest_transaction_text": "Latest Transactions",
+        "list_latestTransaction_text":"This is a list of latest transactions",
+        "viewAll_text":"View all",
+        "transaction_title_text":"Transaction",
+        "date&Time_title_text":"Date & Time",
+        "amount_title_text":" Amount",
+        "latestConsumer_title_Text":"Latest Customers"
+    }
+  }
