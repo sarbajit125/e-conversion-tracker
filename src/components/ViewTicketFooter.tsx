@@ -13,6 +13,7 @@ import { ViewTicketResp } from "@/app/api/view-ticket/route";
 import Link from "next/link";
 import { useQuery } from "@tanstack/react-query";
 import { fetchImageFile } from "@/query-hooks/query-hook";
+import { IntlMessages } from "../../get-localization";
 function ViewTicketFooter(props: PrintPDFModel) {
   const downlodFileQuery = useQuery({
     queryKey: ["download-ticket"],
@@ -37,7 +38,7 @@ function ViewTicketFooter(props: PrintPDFModel) {
     <div className="p-4 px-4 md:p-8 mb-6 flex justify-end text-white ">
       <Link href={"search-ticket"}>
         <button className="p-3 mr-3 bg-slate-500 rounded">
-          Search another
+          {props.localizeDict["viewTicket"].searchAnother_text}
         </button>
       </Link>
       {props.type === "slot" ? (
@@ -47,7 +48,7 @@ function ViewTicketFooter(props: PrintPDFModel) {
             downlodFileQuery.refetch();
           }}
         >
-          Save
+          {props.localizeDict["viewTicket"].save_button_text}
         </button>
       ) : (
         <PDFDownloadLink
@@ -56,13 +57,16 @@ function ViewTicketFooter(props: PrintPDFModel) {
               records={props.records}
               application_id={props.application_id}
               type={props.type}
+              localizeDict={props.localizeDict}
             />
           }
           fileName={"PDF_REPORT.pdf"}
           className="p-3 mr-3 bg-blue-500 rounded"
         >
           {({ blob, url, loading, error }) =>
-            loading ? "Report loading..." : "Print"
+            loading
+              ? props.localizeDict["viewTicket"].loading_button_Text
+              : props.localizeDict["viewTicket"].print_button_text
           }
         </PDFDownloadLink>
       )}
@@ -162,4 +166,5 @@ export default ViewTicketFooter;
 export interface PrintPDFModel extends ViewTicketResp {
   application_id: string;
   type: string;
+  localizeDict: IntlMessages;
 }

@@ -8,5 +8,5 @@ export default async function SearchTicker({
   params: { lang: Locale };
 }) {
   const localeDict = (await getLocalization(lang)) as IntlMessages;
-  return <SearchTicket localizeDict={localeDict} />;
+  return <SearchTicket localizeDict={localeDict} locale={lang} />;
 }

@@ -2,21 +2,25 @@ import ViewTicketFooter from "@/components/ViewTicketFooter";
 import { getCurrencySymbol } from "@/lib/utils";
 import { fetchTicketData } from "@/query-hooks/query-hook";
 import React from "react";
+import { getLocalization, IntlMessages } from "../../../../get-localization";
+
+import { Locale } from "../../../../i18n-config";
 async function Page({
-  params,
+  params: { lang },
   searchParams,
 }: {
-  params: { slug: string };
+  params: { lang: Locale };
   searchParams: { [key: string]: string | string[] | undefined };
 }) {
   const id = searchParams["id"] as string;
   const type = searchParams['type'] as string
+  const localeDict = (await getLocalization(lang)) as IntlMessages;
   const data = await fetchTicketData(id, type);
   return (
     <main className="container max-w-screen-lg mx-auto lg: ml-60">
       <div className="px-4 p-4">
-        <h2 className="font-semibold text-xl text-gray-600">Ticket Summary</h2>
-        <p className="text-gray-500 mb-6">View/Print ticket details</p>
+        <h2 className="font-semibold text-xl text-gray-600">{localeDict['viewTicket'].viewTicket_heading}</h2>
+        <p className="text-gray-500 mb-6">{localeDict['viewTicket'].viewTicket_desc}</p>
       </div>
       <div
         id="contentView"
@@ -39,7 +43,7 @@ async function Page({
           ))}
         </div>
       </div>
-      <ViewTicketFooter records={data.records} application_id={id} type={type}/>
+      <ViewTicketFooter records={data.records} application_id={id} type={type} localizeDict={localeDict}/>
     </main>
   );
 }

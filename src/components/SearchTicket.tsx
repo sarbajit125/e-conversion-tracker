@@ -26,7 +26,7 @@ import { FaCalendarDays } from "react-icons/fa6";
 import dayjs from "dayjs";
 import { IntlMessages } from "../../get-localization";
 
-function SearchTicket({ localizeDict }: SearchTicketProps) {
+function SearchTicket({ localizeDict, locale }: SearchTicketProps) {
   const router = useRouter();
   const { toast } = useToast();
   const deleteMutation = useMutation({
@@ -243,7 +243,7 @@ function SearchTicket({ localizeDict }: SearchTicketProps) {
                         const params = new URLSearchParams();
                         params.set("id", id);
                         params.set("type", type);
-                        router.push(`${"/view-ticket?" + params.toString()}`);
+                        router.push(`/${locale}/view-ticket?${params.toString()}`);
                       } else if (action === "delete") {
                         setDeleteObj({
                           application_id: id,
@@ -380,4 +380,5 @@ function SearchTicket({ localizeDict }: SearchTicketProps) {
 export default SearchTicket;
 interface SearchTicketProps {
     localizeDict: IntlMessages;
+    locale: string;
 }

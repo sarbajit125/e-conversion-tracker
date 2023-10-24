@@ -125,6 +125,14 @@
         "tableHeader_applicationId_text": "आवेदन आईडी",
         "tableHeader_status_text": "स्थिति",
         "tableHeader_action_text": "क्रिया"
-      } 
+      },
+      "viewTicket": {
+        "viewTicket_heading": "टिकट सारांश",
+        "viewTicket_desc": "टिकट विवरण देखें/प्रिंट करें",
+        "searchAnother_text": "और खोजें",
+        "save_button_text": "सहेजें",
+        "print_button_text": "मुद्रण",
+         "loading_button_Text": "रिपोर्ट लोड हो रही है..."
+      }
   }
   

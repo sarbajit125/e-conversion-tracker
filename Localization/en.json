@@ -124,6 +124,13 @@
       "tableHeader_applicationId_text":"Application Id",
       "tableHeader_status_text":"Status",
       "tableHeader_action_text":"Action"
+    },
+    "viewTicket":{
+      "viewTicket_heading":"Ticket Summary",
+      "viewTicket_desc": "View/Print ticket details",
+      "searchAnother_text" :"Search another",
+      "save_button_text": "Save",
+      "print_button_text":"Print",
+      "loading_button_Text":"Report loading..."
     }
-        
   }
