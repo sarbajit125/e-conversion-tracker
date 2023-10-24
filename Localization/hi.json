@@ -65,6 +65,34 @@
       "financial_year_label": "वित्तीय वर्ष",
       "transaction_amount_label": "पौटी राशि",
       "financial_year_placeholder": "पौटी जमा किए जाने वाले वर्ष के ल"
+    },
+    "createTicket":{
+      "conversion_tracker_form_title": "औपचारिकता ट्रैकर फ़ॉर्म",
+      "conversion_tracker_form_description": "एक टिकट बनाने के लिए संबंधित विवरण भरें।",
+      "upload_receipts_title": "रसीदें अपलोड करें",
+      "upload_receipts_description": "आप सीधे फॉर्म को भरने के लिए रसीदें अपलोड कर सकते हैं",
+      "application_details_slip_label": "आवेदन विवरण स्लिप",
+      "acknowledge_payment_receipt_label": "स्वीकृति-कम-भुगतान रसीद",
+      "conversion_payment_acknowledge_slip_label": "परिवर्तन भुगतान स्वीकृति स्लिप",
+      "applicant_name_label": "आवेदक का नाम",
+      "application_id_label": "आवेदन आईडी",
+      "mouza_label": "मौज़ा",
+      "tahsil_label": "तहसील",
+      "khata_no_label": "खाता नंबर",
+      "application_fees_id_label": "आवेदन शुल्क आईडी",
+      "application_date_label": "आवेदन तारीख",
+      "application_fees_label": "आवेदन शुल्क",
+      "ready_for_conversion_label": "परिवर्तन के लिए तैयार हैं?",
+      "submit_button_label": "सबमिट करें",
+      "conversion_details_title": "परिवर्तन विवरण",
+      "conversion_details_description": "आप सीधे फॉर्म को भरने के लिए रसीदें अपलोड कर सकते हैं",
+      "conversion_case_no_label": "परिवर्तन मामला नंबर",
+      "deposit_date_label": "जमा तिथि",
+      "conversion_transaction_id_label": "परिवर्तन लेन-देन आईडी",
+      "conversion_amount_deposited_label": "जमा की गई राशि",
+      "ready_for_conversion_checked_label": "परिवर्तन के लिए तैयार हैं?",
+      "personalDetails_heading": "व्यक्तिगत विवरण",
+      "personalDetails_desc": "कृपया सभी क्षेत्रों को भरें।"
     }
   }
   

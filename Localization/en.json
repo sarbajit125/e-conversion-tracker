@@ -65,5 +65,32 @@
         "financial_year_label": "Financial year",
         "transaction_amount_label": "Pauti Amount",
         "financial_year_placeholder":"Enter year for which pauti deposited"
-    }
+    },
+    "createTicket":{
+      "conversion_tracker_form_title": "Conversion Tracker Form",
+      "conversion_tracker_form_description": "Fill the form with relevant details to create a ticket.",
+      "upload_receipts_title": "Upload Receipts",
+      "upload_receipts_description": "You can directly upload receipts to auto fill form.",
+      "application_details_slip_label": "Application details slip",
+      "acknowledge_payment_receipt_label": "Acknowledge-cum-Payment Receipt",
+      "conversion_payment_acknowledge_slip_label": "Conversion Payment Acknowledge Slip",
+      "applicant_name_label": "Applicant Name",
+      "application_id_label": "Application Id",
+      "mouza_label": "Mouza",
+      "tahsil_label": "Tahsil",
+      "khata_no_label": "Khata No.",
+      "application_fees_id_label": "Application Fees Id",
+      "application_date_label": "Application Date",
+      "application_fees_label": "Application Fees",
+      "ready_for_conversion_label": "Ready for conversion?",
+      "submit_button_label": "Submit",
+      "conversion_details_title": "Conversion Details",
+      "conversion_details_description": "You can directly upload receipts to auto fill form.",
+      "conversion_case_no_label": "Conversion Case No",
+      "deposit_date_label": "Deposit Date",
+      "conversion_transaction_id_label": "Conversion Transaction Id",
+      "conversion_amount_deposited_label": "Conversion Amount Deposited",
+      "personalDetails_heading": "Personal Details",
+      "personalDetails_desc":"Please fill out all the fields."
+    }    
   }
