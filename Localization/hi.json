@@ -93,6 +93,38 @@
       "ready_for_conversion_checked_label": "परिवर्तन के लिए तैयार हैं?",
       "personalDetails_heading": "व्यक्तिगत विवरण",
       "personalDetails_desc": "कृपया सभी क्षेत्रों को भरें।"
-    }
+    },
+    "searchTicket": {
+        "searchTicket_heading": "टिकट खोजें",
+        "searchTicket_description": "आवेदन आईडी और अन्य फ़िल्टर्स का उपयोग करके टिकट खोजें",
+        "searchPlaceholder": "आवेदन संख्या, नाम के द्वारा खोजें...",
+        "searchSubmitButton": "प्रस्तुत करें",
+        "searchResetButton": "फ़िल्टर रीसेट करें",
+        "searchFilters": "फ़िल्टर",
+        "searchAllType": "सभी प्रकार",
+        "searchConversion": "रूपांतरण",
+        "searchPauti": "पौटी",
+        "searchSlotBooking": "स्लॉट बुकिंग",
+        "searchSortingType": "क्रमबद्ध प्रकार",
+        "searchDescOrder": "घटते क्रम में",
+        "searchAscOrder": "बढ़ते क्रम में",
+        "queryResult_heading": "क्वेरी परिणाम",
+        "noTicketsFound": "इस क्वेरी के लिए कोई टिकट नहीं मिला",
+        "deleteConfirmation": "क्या आप इस टिकट को हटाना चाहते हैं? कृपया पुष्टि करें.",
+        "deleteButton": "हटाएं",
+        "cancelButton": "रद्द करें",
+        "conversionPaymentDetailsTitle": "रूपांतरण भुगतान विवरण",
+        "conversionCaseNo": "रूपांतरण मामला संख्या",
+        "conversionDate": "जमा तिथि",
+        "conversionTransactionId": "रूपांतरण लेन-देन आईडी",
+        "conversionAmount": "रूपांतरण राशि जमा की गई",
+        "conversionAmountPrefix": "$",
+        "conversionSubmitButton": "प्रस्तुत करें",
+        "tableHeader_name_text": "नाम",
+        "tableHeader_category_text": "श्रेणी",
+        "tableHeader_applicationId_text": "आवेदन आईडी",
+        "tableHeader_status_text": "स्थिति",
+        "tableHeader_action_text": "क्रिया"
+      } 
   }
   

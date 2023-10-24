@@ -92,5 +92,38 @@
       "conversion_amount_deposited_label": "Conversion Amount Deposited",
       "personalDetails_heading": "Personal Details",
       "personalDetails_desc":"Please fill out all the fields."
-    }    
+    },
+    "searchTicket":{
+      "searchTicket_heading": "Search Ticket",
+      "searchTicket_description": "Search ticket using application id and other filters",
+      "searchPlaceholder": "Search by application number, name...",
+      "searchSubmitButton": "Submit",
+      "searchResetButton": "Reset Filter",
+      "searchFilters": "Filters",
+      "searchAllType": "All Type",
+      "searchConversion": "Conversion",
+      "searchPauti": "Pauti",
+      "searchSlotBooking": "Slot Booking",
+      "searchSortingType": "Sorting Type",
+      "searchDescOrder": "Descending Order",
+      "searchAscOrder": "Ascending Order",
+      "queryResult_heading": "Query Result",
+      "noTicketsFound": "No tickets found for this query",
+      "deleteConfirmation": "Are you sure you want to delete this ticket? Please confirm.",
+      "deleteButton": "Delete",
+      "cancelButton": "Cancel",
+      "conversionPaymentDetailsTitle": "Conversion payment details",
+      "conversionCaseNo": "Conversion Case No",
+      "conversionDate": "Deposit Date",
+      "conversionTransactionId": "Conversion Transaction Id",
+      "conversionAmount": "Conversion Amount Deposited",
+      "conversionAmountPrefix": "$",
+      "conversionSubmitButton": "Submit",
+      "tableHeader_name_text":"Name",
+      "tableHeader_category_text":"Category",
+      "tableHeader_applicationId_text":"Application Id",
+      "tableHeader_status_text":"Status",
+      "tableHeader_action_text":"Action"
+    }
+        
   }
