@@ -7,6 +7,8 @@ const dictionaries = {
     cs: () => import('./Localization/cs.json').then((module) => module.default),
   }
   
-  export const getLocalization = async (locale: Locale) =>
+export const getLocalization = async (locale: Locale) =>
     dictionaries[locale]?.() ?? dictionaries.en()
   
+type Messages = typeof import('./Localization/en.json');
+export declare interface IntlMessages extends Messages {}

@@ -199,7 +199,7 @@ export default async function RootLayout({
                           <li>
                             <RegularNavLinks
                               path={`/${params.lang}/create-pauti`}
-                              linkName={localeDict['navigation'].searchTicket_nav_text}
+                              linkName={localeDict['navigation'].pauti_nav_text}
                               id="addSlot"
                               svg={<IoTicketOutline />}
                             />
