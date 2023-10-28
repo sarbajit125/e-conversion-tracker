@@ -184,7 +184,9 @@ function CreatePauti({ localizeDict }: CreatePautiProps) {
     if (slotDate) {
       console.log("Slot Appointment Date:", slotDate);
       const formattedDate = new Date(slotDate);
-      slotForm.setFieldValue("slotDate", formattedDate);
+      if (!formattedDate) {
+        slotForm.setFieldValue("slotDate", formattedDate);
+      }
     }
     if (districtLine) {
       const { district, regOffice } = parseDistrict(districtLine);
